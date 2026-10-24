@@ -1,0 +1,141 @@
+<div class="max-w-4xl mx-auto space-y-6">
+    <!-- Header Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 sm:p-8">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-100 pb-5">
+            <div>
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-vinix-navy border border-blue-200">
+                    <svg class="w-3.5 h-3.5 mr-1.5 text-vinix-aurum" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                    </svg>
+                    Self-Assessment Kompas Karir
+                </span>
+                <h1 class="text-2xl font-bold text-slate-900 mt-2">Kuesioner Kompetensi Pelamar</h1>
+                <p class="text-sm text-slate-500 mt-1">Langkah {{ $currentStep }} dari {{ $totalSteps }}: {{ $criterion->name ?? '' }} ({{ $criterion->code ?? '' }})</p>
+            </div>
+            <div class="text-right">
+                <span class="text-2xl font-extrabold text-vinix-navy">{{ $progress }}%</span>
+                <span class="text-xs text-slate-400 block">Progres Pengisian</span>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="w-full bg-slate-100 rounded-full h-2.5 mt-4 overflow-hidden">
+            <div class="bg-gradient-to-r from-vinix-navy to-vinix-aurum h-2.5 rounded-full transition-all duration-500 ease-out" style="width: {{ $progress }}%"></div>
+        </div>
+
+        <!-- Step Pills Indicator -->
+        <div class="grid grid-cols-7 gap-2 mt-5">
+            @foreach($criteriaList as $idx => $crit)
+                @php $stepNum = $idx + 1; @endphp
+                <button type="button"
+                    wire:click="goToStep({{ $stepNum }})"
+                    class="py-2 px-1 text-center rounded-lg text-xs font-semibold transition-all duration-200 {{ $currentStep === $stepNum ? 'bg-vinix-navy text-white shadow-sm ring-2 ring-vinix-aurum/40' : ($currentStep > $stepNum ? 'bg-blue-50 text-vinix-navy border border-blue-100' : 'bg-slate-50 text-slate-400 hover:bg-slate-100') }}">
+                    <span class="block text-[10px] uppercase font-bold">{{ $crit['code'] }}</span>
+                    <span class="hidden md:inline text-[11px] truncate block">{{ Str::limit($crit['name'], 12) }}</span>
+                </button>
+            @endforeach
+        </div>
+    </div>
+
+    <!-- Questions Form Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 sm:p-8 space-y-8">
+        <div class="flex items-center space-x-3 bg-amber-50/60 border border-amber-200/60 rounded-xl p-4">
+            <div class="w-9 h-9 rounded-lg bg-vinix-aurum/20 flex items-center justify-center text-amber-700 flex-shrink-0">
+                <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <p class="text-xs sm:text-sm text-amber-900 leading-relaxed">
+                Pilihlah skala penilaian (20 - 100) yang paling mencerminkan kemampuan riil Anda saat ini. Sistem algoritma SAW akan mengomputasikan preferensi kecocokan Anda secara objektif.
+            </p>
+        </div>
+
+        <div class="space-y-8 divide-y divide-slate-100">
+            @foreach($criterion->questions as $qIndex => $question)
+                <div class="pt-6 first:pt-0 space-y-4">
+                    <div class="flex items-start space-x-3">
+                        <span class="flex-shrink-0 w-7 h-7 rounded-full bg-vinix-navy text-white text-xs font-bold flex items-center justify-center mt-0.5">
+                            {{ $question->order_num }}
+                        </span>
+                        <div>
+                            <h3 class="text-base font-semibold text-slate-800 leading-snug">
+                                {{ $question->question_text }}
+                            </h3>
+                            <p class="text-xs text-slate-400 mt-1">Kriteria: {{ $criterion->name }} ({{ $criterion->code }})</p>
+                        </div>
+                    </div>
+
+                    <!-- Scale Selector Options -->
+                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 pt-2">
+                        @php
+                            $options = [
+                                20 => ['label' => 'Sangat Kurang', 'desc' => 'Pemula / Belum Tahu', 'color' => 'slate'],
+                                40 => ['label' => 'Kurang', 'desc' => 'Dasar / Perlu Bimbingan', 'color' => 'blue'],
+                                60 => ['label' => 'Cukup', 'desc' => 'Menengah / Cukup Bisa', 'color' => 'indigo'],
+                                80 => ['label' => 'Baik', 'desc' => 'Mahir / Terbiasa Mandiri', 'color' => 'sky'],
+                                100 => ['label' => 'Sangat Baik', 'desc' => 'Ahli / Berpengalaman', 'color' => 'amber'],
+                            ];
+                            $currentVal = $answers[$question->id] ?? 60;
+                        @endphp
+
+                        @foreach($options as $val => $meta)
+                            <label class="relative flex flex-col p-3 rounded-xl border cursor-pointer transition-all duration-200 {{ $currentVal == $val ? 'bg-blue-50/80 border-vinix-navy ring-2 ring-vinix-navy/20 shadow-sm' : 'bg-slate-50/50 border-slate-200 hover:border-slate-300 hover:bg-slate-50' }}">
+                                <input type="radio"
+                                    name="q_{{ $question->id }}"
+                                    value="{{ $val }}"
+                                    wire:click="setAnswer({{ $question->id }}, {{ $val }})"
+                                    class="sr-only"
+                                    {{ $currentVal == $val ? 'checked' : '' }}>
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="text-xs font-extrabold {{ $currentVal == $val ? 'text-vinix-navy' : 'text-slate-700' }}">
+                                        Skor {{ $val }}
+                                    </span>
+                                    <span class="w-4 h-4 rounded-full border flex items-center justify-center {{ $currentVal == $val ? 'border-vinix-navy bg-vinix-navy' : 'border-slate-300 bg-white' }}">
+                                        @if($currentVal == $val)
+                                            <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+                                        @endif
+                                    </span>
+                                </div>
+                                <span class="text-xs font-semibold text-slate-800">{{ $meta['label'] }}</span>
+                                <span class="text-[11px] text-slate-400 mt-0.5 leading-tight">{{ $meta['desc'] }}</span>
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="flex items-center justify-between pt-6 border-t border-slate-100">
+            <button type="button"
+                wire:click="prevStep"
+                {{ $currentStep === 1 ? 'disabled' : '' }}
+                class="inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 {{ $currentStep === 1 ? 'text-slate-300 bg-slate-50 cursor-not-allowed' : 'text-slate-700 bg-slate-100 hover:bg-slate-200 active:scale-95' }}">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                Sebelumnya
+            </button>
+
+            @if($currentStep < $totalSteps)
+                <button type="button"
+                    wire:click="nextStep"
+                    class="inline-flex items-center px-6 py-2.5 rounded-xl text-sm font-semibold text-white bg-vinix-navy hover:bg-blue-900 active:scale-95 shadow-md shadow-vinix-navy/20 transition-all duration-200">
+                    Langkah Selanjutnya
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            @else
+                <button type="button"
+                    wire:click="finishAssessment"
+                    class="inline-flex items-center px-7 py-2.5 rounded-xl text-sm font-bold text-slate-900 bg-gradient-to-r from-vinix-aurum to-amber-400 hover:from-amber-400 hover:to-amber-500 active:scale-95 shadow-lg shadow-amber-500/25 transition-all duration-200">
+                    <svg class="w-4 h-4 mr-2 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    Selesaikan & Lihat Rekomendasi SAW
+                </button>
+            @endif
+        </div>
+    </div>
+</div>
