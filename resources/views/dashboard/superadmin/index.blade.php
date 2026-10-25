@@ -25,7 +25,7 @@
                 <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Master Divisi Magang</span>
                 <span class="text-3xl font-black text-vinix-navy mt-1 block">{{ $divisionCount }}</span>
                 <a href="{{ route('superadmin.divisions') }}" class="text-[11px] font-bold text-vinix-navy hover:underline mt-2 inline-block">
-                    Kelola 19 Divisi &rarr;
+                    Kelola 14 Divisi &rarr;
                 </a>
             </div>
 
@@ -61,9 +61,9 @@
                     <div class="w-10 h-10 rounded-xl bg-blue-50 text-vinix-navy flex items-center justify-center font-bold mb-4">
                         1
                     </div>
-                    <h3 class="text-lg font-bold text-slate-900">19 Divisi Magang</h3>
+                    <h3 class="text-lg font-bold text-slate-900">14 Divisi Magang</h3>
                     <p class="text-xs text-slate-500 mt-1 leading-relaxed">
-                        Kelola nama dan deskripsi 19 alternatif divisi magang IT & Bisnis di PT Vinix Seven Aurum.
+                        Kelola nama dan deskripsi 14 alternatif divisi magang IT & Bisnis di PT Vinix Seven Aurum.
                     </p>
                 </div>
                 <div class="mt-6 pt-4 border-t border-slate-100">
@@ -97,7 +97,7 @@
                     </div>
                     <h3 class="text-lg font-bold text-slate-900">Dynamic Matrix Weights</h3>
                     <p class="text-xs text-slate-500 mt-1 leading-relaxed">
-                        Ubah persentase matriks bobot kriteria tiap divisi (19 x 7 = 133 titik bobot) secara dinamis tanpa sentuh kode.
+                        Ubah persentase matriks bobot kriteria tiap divisi (14 x 7 = 98 titik bobot) secara dinamis tanpa sentuh kode.
                     </p>
                 </div>
                 <div class="mt-6 pt-4 border-t border-amber-200/50">

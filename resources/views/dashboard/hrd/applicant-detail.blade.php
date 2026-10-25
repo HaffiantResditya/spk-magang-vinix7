@@ -142,12 +142,12 @@
             </div>
         </div>
 
-        <!-- SAW Ranking Table (Top 3 & All 19 Divisions) -->
+        <!-- SAW Ranking Table (Top 3 & All 14 Divisions) -->
         <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-4">
             <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                 <div>
                     <h3 class="text-lg font-bold text-slate-900">Hasil Perhitungan Algoritma SAW</h3>
-                    <p class="text-xs text-slate-400">Peringkat preferensi 19 divisi magang berdasarkan perkalian matriks R dengan bobot W</p>
+                    <p class="text-xs text-slate-400">Peringkat preferensi 14 divisi magang berdasarkan perkalian matriks R dengan bobot W</p>
                 </div>
             </div>
 

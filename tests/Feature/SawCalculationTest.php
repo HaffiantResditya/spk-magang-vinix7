@@ -21,15 +21,15 @@ class SawCalculationTest extends TestCase
 
     public function test_database_has_seeded_master_data(): void
     {
-        $this->assertEquals(19, Division::count());
+        $this->assertEquals(14, Division::count());
         $this->assertEquals(7, Criterion::count());
         $this->assertEquals(18, Question::count());
-        $this->assertEquals(133, MatrixWeight::count());
+        $this->assertEquals(98, MatrixWeight::count());
     }
 
     public function test_saw_engine_calculates_top_3_recommendations(): void
     {
-        $user = User::where('email', 'pelamar@vinix.id')->first();
+        $user = User::where('email', 'pelamar.vinix7@gmail.com')->first();
         $this->assertNotNull($user);
 
         // Seed sample answers with higher scores for Web (C1)
@@ -48,7 +48,7 @@ class SawCalculationTest extends TestCase
         $this->assertCount(3, $result['top3']);
         $this->assertEquals(1, $result['top3'][0]['rank']);
 
-        // Since C1 is scored 100%, Web / UIUX divisions should rank near the top!
+        // Since C1 is scored 100%, Web & UIUX Developer should rank near the top!
         $this->assertGreaterThan(50.0, $result['top3'][0]['final_score']);
     }
 

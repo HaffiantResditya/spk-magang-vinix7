@@ -14,9 +14,9 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Super Admin
-        User::firstOrCreate(
-            ['email' => 'superadmin@vinix.id'],
+        // Super Admin (Gmail)
+        User::updateOrCreate(
+            ['email' => 'superadmin.vinix7@gmail.com'],
             [
                 'name' => 'Super Admin Vinix7',
                 'password' => Hash::make('password'),
@@ -24,9 +24,9 @@ class UserSeeder extends Seeder
             ]
         );
 
-        // HRD
-        User::firstOrCreate(
-            ['email' => 'hrd@vinix.id'],
+        // HRD (Gmail)
+        User::updateOrCreate(
+            ['email' => 'hrd.vinix7@gmail.com'],
             [
                 'name' => 'Admin HRD Vinix7',
                 'password' => Hash::make('password'),
@@ -34,9 +34,9 @@ class UserSeeder extends Seeder
             ]
         );
 
-        // Pelamar Test
-        $applicant = User::firstOrCreate(
-            ['email' => 'pelamar@vinix.id'],
+        // Pelamar Test (Gmail)
+        $applicant = User::updateOrCreate(
+            ['email' => 'pelamar.vinix7@gmail.com'],
             [
                 'name' => 'Budi Santoso',
                 'password' => Hash::make('password'),
@@ -44,7 +44,7 @@ class UserSeeder extends Seeder
             ]
         );
 
-        ApplicantProfile::firstOrCreate(
+        ApplicantProfile::updateOrCreate(
             ['user_id' => $applicant->id],
             [
                 'type' => 'mahasiswa',

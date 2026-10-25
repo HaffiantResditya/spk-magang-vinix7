@@ -6,7 +6,7 @@
                     Dynamic Matrix Weights (W) Algoritma SAW
                 </h2>
                 <p class="text-xs sm:text-sm text-slate-500 mt-1">
-                    Konfigurasi persentase bobot kriteria untuk 19 divisi magang tanpa mengubah source code aplikasi.
+                    Konfigurasi persentase bobot kriteria untuk 14 divisi magang tanpa mengubah source code aplikasi.
                 </p>
             </div>
             <a href="{{ route('superadmin.dashboard') }}" class="text-xs font-semibold text-slate-500 hover:text-vinix-navy">
@@ -91,7 +91,7 @@
 
                 <div class="p-5 border-t border-slate-100 bg-slate-50/60 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <span class="text-xs text-slate-500">
-                        Pastikan seluruh 19 divisi terkonfigurasi dengan tepat sebelum menyimpan perubahan.
+                        Pastikan seluruh 14 divisi terkonfigurasi dengan tepat sebelum menyimpan perubahan.
                     </span>
                     <button type="submit" class="px-7 py-3 rounded-xl text-xs sm:text-sm font-extrabold text-slate-950 bg-gradient-to-r from-vinix-aurum to-amber-400 hover:from-amber-400 hover:to-amber-500 active:scale-95 shadow-lg shadow-amber-500/25 transition">
                         Simpan Seluruh Matriks Bobot SAW

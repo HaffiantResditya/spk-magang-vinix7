@@ -15,7 +15,7 @@ class RoleAccessTest extends TestCase
 
     public function test_superadmin_can_access_superadmin_dashboard_and_matrix_weights(): void
     {
-        $superadmin = User::where('email', 'superadmin@vinix.id')->first();
+        $superadmin = User::where('email', 'superadmin.vinix7@gmail.com')->first();
         $this->assertNotNull($superadmin);
 
         $response = $this->actingAs($superadmin)->get('/superadmin/dashboard');
@@ -33,7 +33,7 @@ class RoleAccessTest extends TestCase
 
     public function test_hrd_can_access_hrd_dashboard_and_applicants(): void
     {
-        $hrd = User::where('email', 'hrd@vinix.id')->first();
+        $hrd = User::where('email', 'hrd.vinix7@gmail.com')->first();
         $this->assertNotNull($hrd);
 
         $response = $this->actingAs($hrd)->get('/hrd/dashboard');
@@ -45,7 +45,7 @@ class RoleAccessTest extends TestCase
 
     public function test_applicant_can_access_applicant_dashboard_and_assessment(): void
     {
-        $applicant = User::where('email', 'pelamar@vinix.id')->first();
+        $applicant = User::where('email', 'pelamar.vinix7@gmail.com')->first();
         $this->assertNotNull($applicant);
 
         $response = $this->actingAs($applicant)->get('/applicant/dashboard');
@@ -60,7 +60,7 @@ class RoleAccessTest extends TestCase
 
     public function test_applicant_cannot_access_superadmin_or_hrd(): void
     {
-        $applicant = User::where('email', 'pelamar@vinix.id')->first();
+        $applicant = User::where('email', 'pelamar.vinix7@gmail.com')->first();
         $this->assertNotNull($applicant);
 
         $response = $this->actingAs($applicant)->get('/superadmin/dashboard');

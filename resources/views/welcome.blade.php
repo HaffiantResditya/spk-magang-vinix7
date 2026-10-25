@@ -28,7 +28,7 @@
 
                 <div class="flex items-center space-x-3 sm:space-x-4">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="inline-flex items-center px-4 py-2 text-xs sm:text-sm font-bold text-slate-900 bg-vinix-aurum hover:bg-amber-400 rounded-xl shadow-sm transition">
+                        <a href="{{ url('/dashboard') }}" class="inline-flex items-center px-4 py-2 text-xs sm:text-sm font-bold text-slate-950 bg-vinix-aurum hover:bg-amber-400 rounded-xl shadow-sm transition">
                             Masuk ke Dashboard
                             <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -51,7 +51,7 @@
             <div class="max-w-5xl mx-auto text-center relative z-10 space-y-6">
                 <div class="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold bg-vinix-aurum/20 text-vinix-aurum border border-vinix-aurum/40 shadow-xs">
                     <span class="w-2 h-2 rounded-full bg-vinix-aurum mr-2 animate-ping"></span>
-                    Sistem Pendukung Keputusan Berbasis Algoritma SAW
+                    Magang & Studi Independen BATCH 5 &bull; Learn. Build. Impact.
                 </div>
 
                 <h1 class="text-4xl sm:text-6xl font-black tracking-tight leading-tight">
@@ -60,7 +60,7 @@
                 </h1>
 
                 <p class="max-w-3xl mx-auto text-base sm:text-xl text-blue-100/90 font-normal leading-relaxed">
-                    Petakan kompetensi riil Anda secara terukur ke dalam <span class="text-vinix-aurum font-bold">19 Divisi Spesifik</span> IT & Bisnis menggunakan mesin matematis <em>Simple Additive Weighting</em> (SAW) sebelum mengirimkan lamaran resmi.
+                    Petakan kompetensi riil Anda secara terukur ke dalam <span class="text-vinix-aurum font-bold">14 Divisi Spesifik</span> IT & Bisnis menggunakan mesin matematis <em>Simple Additive Weighting</em> (SAW) sebelum mengirimkan lamaran resmi.
                 </p>
 
                 <div class="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -72,7 +72,7 @@
                             </svg>
                         </a>
                     @else
-                        <a href="{{ route('register') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 rounded-2xl text-base font-extrabold text-slate-950 bg-gradient-to-r from-vinix-aurum via-yellow-400 to-amber-500 hover:from-yellow-400 hover:to-amber-600 shadow-xl shadow-amber-500/25 transition active:scale-95">
+                        <a href="{{ route('register') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 rounded-2xl text-base font-extrabold text-slate-950 bg-gradient-to-r from-vinix-aurum via-yellow-400 to-amber-500 hover:from-yellow-400 hover:to-amber-500 shadow-xl shadow-amber-500/25 transition active:scale-95">
                             Registrasi & Mulai Asesmen
                             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -87,8 +87,8 @@
                 <!-- Stats Bar -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-12 text-left max-w-4xl mx-auto">
                     <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10">
-                        <span class="text-3xl font-extrabold text-vinix-aurum">19</span>
-                        <p class="text-xs text-blue-200 mt-1">Pilihan Divisi Spesifik</p>
+                        <span class="text-3xl font-extrabold text-vinix-aurum">14</span>
+                        <p class="text-xs text-blue-200 mt-1">Pilihan Open Roles Batch 5</p>
                     </div>
                     <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10">
                         <span class="text-3xl font-extrabold text-vinix-aurum">7</span>
@@ -110,8 +110,59 @@
             <div class="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-vinix-aurum/15 blur-3xl pointer-events-none"></div>
         </section>
 
+        <!-- 14 Open Roles Showcase (Matching Poster) -->
+        <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="text-center space-y-3 mb-12">
+                <span class="text-xs font-bold uppercase tracking-wider text-vinix-navy bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
+                    Program Magang & Studi Independen Batch 5
+                </span>
+                <h2 class="text-3xl font-extrabold text-slate-900">14 Pilihan Divisi (Open Roles)</h2>
+                <p class="text-sm text-slate-500 max-w-2xl mx-auto">
+                    Kesempatan untuk mengembangkan skill, mengerjakan project nyata, dan berdampak bersama VINIX7.
+                </p>
+            </div>
+
+            @php
+                $roles = [
+                    ['name' => 'Human Resource (SDM) Analyst', 'badge' => 'SDM & People', 'color' => 'amber'],
+                    ['name' => 'Digital Public Relations & Communication Specialist', 'badge' => 'Public Relations', 'color' => 'blue'],
+                    ['name' => 'Python Data Science Engineer', 'badge' => 'Data Science', 'color' => 'indigo'],
+                    ['name' => 'Ethical Hacker', 'badge' => 'Security', 'color' => 'rose'],
+                    ['name' => 'Data Analyst', 'badge' => 'Data & BI', 'color' => 'sky'],
+                    ['name' => 'Bisnis Digital Analyst', 'badge' => 'Business', 'color' => 'emerald'],
+                    ['name' => 'Python Machine Learning & AI Engineer', 'badge' => 'AI & ML', 'color' => 'purple'],
+                    ['name' => 'Cybersecurity Engineer', 'badge' => 'Cyber Infra', 'color' => 'cyan'],
+                    ['name' => 'Web & UIUX Developer', 'badge' => 'Web & UI/UX', 'color' => 'blue'],
+                    ['name' => 'Investment & Financial Market Analyst', 'badge' => 'Finance', 'color' => 'amber'],
+                    ['name' => 'Social Media & Digital Marketing Strategist', 'badge' => 'Marketing', 'color' => 'pink'],
+                    ['name' => 'Business Administration Intelligence Analyst (Power BI & Excel)', 'badge' => 'Power BI & Excel', 'color' => 'emerald'],
+                    ['name' => 'Tech Project Management Specialist', 'badge' => 'Agile PM', 'color' => 'indigo'],
+                    ['name' => 'Cybercrime & Forensic Investigator', 'badge' => 'Digital Forensics', 'color' => 'slate'],
+                ];
+            @endphp
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                @foreach($roles as $idx => $r)
+                    <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-xs hover:border-vinix-navy/40 hover:shadow-md transition flex items-center justify-between gap-3">
+                        <div class="flex items-center space-x-3.5">
+                            <span class="w-8 h-8 rounded-xl bg-vinix-navy text-white text-xs font-black flex items-center justify-center flex-shrink-0">
+                                {{ $idx + 1 }}
+                            </span>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm sm:text-base leading-snug">{{ $r['name'] }}</h3>
+                                <span class="text-[11px] text-slate-400">Open Role Batch 5</span>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700 flex-shrink-0">
+                            {{ $r['badge'] }}
+                        </span>
+                    </div>
+                @endforeach
+            </div>
+        </section>
+
         <!-- 3-Step Journey -->
-        <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+        <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto border-t border-slate-200/60">
             <div class="text-center space-y-3 mb-12">
                 <span class="text-xs font-bold uppercase tracking-wider text-vinix-navy">Alur Pendaftaran Terpadu</span>
                 <h2 class="text-3xl font-bold text-slate-900">3 Langkah Mudah Menemukan Divisi Idaman</h2>
@@ -134,7 +185,7 @@
                     </div>
                     <h3 class="text-xl font-bold text-slate-900">Kalkulasi SAW Instan</h3>
                     <p class="text-sm text-slate-500 mt-2 leading-relaxed">
-                        Sistem mengalikan nilai normalisasi Anda dengan 133 bobot matriks divisi, menampilkan Top 3 Rekomendasi terbaik.
+                        Sistem mengalikan nilai normalisasi Anda dengan 98 bobot matriks divisi, menampilkan Top 3 Rekomendasi terbaik.
                     </p>
                 </div>
 

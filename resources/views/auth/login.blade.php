@@ -65,15 +65,15 @@
         </span>
         <div class="flex justify-between">
             <span>Super Admin:</span>
-            <code class="font-mono text-slate-800 font-semibold">superadmin@vinix.id | password</code>
+            <code class="font-mono text-slate-800 font-semibold">superadmin.vinix7@gmail.com | password</code>
         </div>
         <div class="flex justify-between">
             <span>Admin HRD:</span>
-            <code class="font-mono text-slate-800 font-semibold">hrd@vinix.id | password</code>
+            <code class="font-mono text-slate-800 font-semibold">hrd.vinix7@gmail.com | password</code>
         </div>
         <div class="flex justify-between">
             <span>Pelamar Test:</span>
-            <code class="font-mono text-slate-800 font-semibold">pelamar@vinix.id | password</code>
+            <code class="font-mono text-slate-800 font-semibold">pelamar.vinix7@gmail.com | password</code>
         </div>
     </div>
 </x-guest-layout>

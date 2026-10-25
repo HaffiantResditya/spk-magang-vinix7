@@ -3,7 +3,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <h2 class="font-bold text-2xl text-slate-900 leading-tight">
-                    Master Data 19 Divisi Magang
+                    Master Data 14 Divisi Magang
                 </h2>
                 <p class="text-xs sm:text-sm text-slate-500 mt-1">
                     Kelola daftar divisi magang IT & Bisnis di PT Vinix Seven Aurum.

@@ -63,7 +63,7 @@
                             </a>
                             <a href="{{ route('superadmin.divisions') }}"
                                 class="inline-flex items-center px-3.5 py-2 text-sm font-semibold rounded-lg transition-colors {{ request()->routeIs('superadmin.divisions*') ? 'bg-white/15 text-vinix-aurum border-b-2 border-vinix-aurum' : 'text-blue-100 hover:text-white hover:bg-white/10' }}">
-                                19 Divisi
+                                14 Divisi
                             </a>
                             <a href="{{ route('superadmin.criteria') }}"
                                 class="inline-flex items-center px-3.5 py-2 text-sm font-semibold rounded-lg transition-colors {{ request()->routeIs('superadmin.criteria*') ? 'bg-white/15 text-vinix-aurum border-b-2 border-vinix-aurum' : 'text-blue-100 hover:text-white hover:bg-white/10' }}">
@@ -163,7 +163,7 @@
                     <a href="{{ route('hrd.applicants') }}" class="block px-3 py-2 rounded-lg text-sm font-medium text-white hover:bg-blue-800">Review Pelamar & Keputusan</a>
                 @elseif(Auth::user()->isSuperAdmin())
                     <a href="{{ route('superadmin.dashboard') }}" class="block px-3 py-2 rounded-lg text-sm font-medium text-white hover:bg-blue-800">Overview Super Admin</a>
-                    <a href="{{ route('superadmin.divisions') }}" class="block px-3 py-2 rounded-lg text-sm font-medium text-white hover:bg-blue-800">19 Master Divisi</a>
+                    <a href="{{ route('superadmin.divisions') }}" class="block px-3 py-2 rounded-lg text-sm font-medium text-white hover:bg-blue-800">14 Master Divisi</a>
                     <a href="{{ route('superadmin.criteria') }}" class="block px-3 py-2 rounded-lg text-sm font-medium text-white hover:bg-blue-800">7 Kriteria & 18 Soal</a>
                     <a href="{{ route('superadmin.matrix-weights') }}" class="block px-3 py-2 rounded-lg text-sm font-medium text-white hover:bg-blue-800">Dynamic Matrix Bobot</a>
                 @endif

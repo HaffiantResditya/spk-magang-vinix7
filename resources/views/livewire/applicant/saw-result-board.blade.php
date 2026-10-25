@@ -10,7 +10,7 @@
             </span>
             <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Kompas Karir Anda Telah Dihitung</h1>
             <p class="mt-3 text-slate-300 text-sm sm:text-base leading-relaxed">
-                Berdasarkan 18 indikator kompetensi yang Anda isi, mesin analitik kami telah memetakan bobot preferensi Anda ke seluruh 19 divisi magang PT Vinix Seven Aurum. Berikut <span class="text-vinix-aurum font-bold">Top 3 Rekomendasi Divisi</span> yang paling sesuai dengan profil keahlian Anda.
+                Berdasarkan 18 indikator kompetensi yang Anda isi, mesin analitik kami telah memetakan bobot preferensi Anda ke seluruh 14 divisi magang PT Vinix Seven Aurum. Berikut <span class="text-vinix-aurum font-bold">Top 3 Rekomendasi Divisi</span> yang paling sesuai dengan profil keahlian Anda.
             </p>
         </div>
         <!-- Decorative Glow -->
@@ -197,11 +197,11 @@
         </form>
     </div>
 
-    <!-- Collapsible Full 19 Divisions Ranking Table -->
+    <!-- Collapsible Full 14 Divisions Ranking Table -->
     <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 space-y-4">
         <div class="flex items-center justify-between">
             <div>
-                <h3 class="text-lg font-bold text-slate-900">Peringkat Lengkap 19 Divisi Magang</h3>
+                <h3 class="text-lg font-bold text-slate-900">Peringkat Lengkap 14 Divisi Magang</h3>
                 <p class="text-xs text-slate-500">Transparansi komputasi algoritma Simple Additive Weighting</p>
             </div>
             <button type="button"

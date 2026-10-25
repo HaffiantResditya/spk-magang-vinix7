@@ -190,7 +190,7 @@
                 <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                     <div>
                         <h3 class="text-lg font-bold text-slate-900">Rekomendasi Algoritma SAW</h3>
-                        <p class="text-xs text-slate-400">Peringkat kecocokan teratas dari 19 divisi magang</p>
+                        <p class="text-xs text-slate-400">Peringkat kecocokan teratas dari 14 divisi magang</p>
                     </div>
                     @if($hasCompletedAssessment)
                         <a href="{{ route('applicant.results') }}" class="text-xs font-bold text-vinix-navy hover:underline">

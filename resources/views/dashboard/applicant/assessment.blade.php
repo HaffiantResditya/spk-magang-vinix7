@@ -6,7 +6,7 @@
                     Tes Asesmen Kompetensi (Kompas Karir)
                 </h2>
                 <p class="text-xs sm:text-sm text-slate-500 mt-1">
-                    Jawablah 18 pertanyaan berikut secara objektif untuk menghitung kecocokan pada 19 divisi magang.
+                    Jawablah 18 pertanyaan berikut secara objektif untuk menghitung kecocokan pada 14 divisi magang.
                 </p>
             </div>
             <a href="{{ route('applicant.dashboard') }}" class="text-xs font-semibold text-slate-500 hover:text-vinix-navy">
