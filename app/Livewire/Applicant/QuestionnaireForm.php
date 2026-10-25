@@ -113,7 +113,7 @@ class QuestionnaireForm extends Component
 
     public function render()
     {
-        $criterion = Criterion::with('questions')->skip($this->currentStep - 1)->first();
+        $criterion = Criterion::with('questions')->orderBy('id')->skip($this->currentStep - 1)->first();
         $progress = round(($this->currentStep / max($this->totalSteps, 1)) * 100);
 
         return view('livewire.applicant.questionnaire-form', [

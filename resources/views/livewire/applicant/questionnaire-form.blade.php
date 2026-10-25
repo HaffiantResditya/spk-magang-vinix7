@@ -29,6 +29,7 @@
                 @php $stepNum = $idx + 1; @endphp
                 <button type="button"
                     wire:click="goToStep({{ $stepNum }})"
+                    wire:key="step-pill-{{ $crit['id'] ?? $stepNum }}"
                     class="py-2 px-1 text-center rounded-lg text-xs font-semibold transition-all duration-200 {{ $currentStep === $stepNum ? 'bg-vinix-navy text-white shadow-sm ring-2 ring-vinix-aurum/40' : ($currentStep > $stepNum ? 'bg-blue-50 text-vinix-navy border border-blue-100' : 'bg-slate-50 text-slate-400 hover:bg-slate-100') }}">
                     <span class="block text-[10px] uppercase font-bold">{{ $crit['code'] }}</span>
                     <span class="hidden md:inline text-[11px] truncate block">{{ Str::limit($crit['name'], 12) }}</span>
@@ -52,7 +53,7 @@
 
         <div class="space-y-8 divide-y divide-slate-100">
             @foreach($criterion->questions as $qIndex => $question)
-                <div class="pt-6 first:pt-0 space-y-4">
+                <div class="pt-6 first:pt-0 space-y-4" wire:key="question-card-{{ $question->id }}">
                     <div class="flex items-start space-x-3">
                         <span class="flex-shrink-0 w-7 h-7 rounded-full bg-vinix-navy text-white text-xs font-bold flex items-center justify-center mt-0.5">
                             {{ $question->order_num }}
@@ -75,30 +76,27 @@
                                 80 => ['label' => 'Baik', 'desc' => 'Mahir / Terbiasa Mandiri', 'color' => 'sky'],
                                 100 => ['label' => 'Sangat Baik', 'desc' => 'Ahli / Berpengalaman', 'color' => 'amber'],
                             ];
-                            $currentVal = $answers[$question->id] ?? 60;
+                            $currentVal = (int) ($answers[$question->id] ?? ($answers[(string) $question->id] ?? 60));
                         @endphp
 
                         @foreach($options as $val => $meta)
-                            <label class="relative flex flex-col p-3 rounded-xl border cursor-pointer transition-all duration-200 {{ $currentVal == $val ? 'bg-blue-50/80 border-vinix-navy ring-2 ring-vinix-navy/20 shadow-sm' : 'bg-slate-50/50 border-slate-200 hover:border-slate-300 hover:bg-slate-50' }}">
-                                <input type="radio"
-                                    name="q_{{ $question->id }}"
-                                    value="{{ $val }}"
-                                    wire:click="setAnswer({{ $question->id }}, {{ $val }})"
-                                    class="sr-only"
-                                    {{ $currentVal == $val ? 'checked' : '' }}>
-                                <div class="flex items-center justify-between mb-1.5">
-                                    <span class="text-xs font-extrabold {{ $currentVal == $val ? 'text-vinix-navy' : 'text-slate-700' }}">
+                            <button type="button"
+                                wire:click="setAnswer({{ $question->id }}, {{ $val }})"
+                                wire:key="q-{{ $question->id }}-val-{{ $val }}"
+                                class="text-left relative flex flex-col p-3 rounded-xl border cursor-pointer transition-all duration-200 {{ $currentVal === (int) $val ? 'bg-blue-50/80 border-vinix-navy ring-2 ring-vinix-navy/20 shadow-sm' : 'bg-slate-50/50 border-slate-200 hover:border-slate-300 hover:bg-slate-50' }}">
+                                <div class="flex items-center justify-between mb-1.5 w-full">
+                                    <span class="text-xs font-extrabold {{ $currentVal === (int) $val ? 'text-vinix-navy' : 'text-slate-700' }}">
                                         Skor {{ $val }}
                                     </span>
-                                    <span class="w-4 h-4 rounded-full border flex items-center justify-center {{ $currentVal == $val ? 'border-vinix-navy bg-vinix-navy' : 'border-slate-300 bg-white' }}">
-                                        @if($currentVal == $val)
+                                    <span class="w-4 h-4 rounded-full border flex items-center justify-center {{ $currentVal === (int) $val ? 'border-vinix-navy bg-vinix-navy' : 'border-slate-300 bg-white' }}">
+                                        @if($currentVal === (int) $val)
                                             <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
                                         @endif
                                     </span>
                                 </div>
                                 <span class="text-xs font-semibold text-slate-800">{{ $meta['label'] }}</span>
                                 <span class="text-[11px] text-slate-400 mt-0.5 leading-tight">{{ $meta['desc'] }}</span>
-                            </label>
+                            </button>
                         @endforeach
                     </div>
                 </div>
