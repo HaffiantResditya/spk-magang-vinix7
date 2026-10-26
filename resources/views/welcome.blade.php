@@ -13,30 +13,26 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased text-slate-800 bg-vinix-bg min-h-full flex flex-col selection:bg-vinix-aurum selection:text-slate-900">
-        <!-- Enterprise Header -->
-        <header class="bg-vinix-navy border-b border-blue-950 text-white shadow-md">
+        <!-- Enterprise Header (Clean White like vinix7.id) -->
+        <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/90 text-slate-800 shadow-xs sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-                <a href="{{ url('/') }}" class="flex items-center space-x-3 group">
-                    <img src="{{ asset('images/vinix7-logo-white.png') }}" alt="VINIX7 Logo" class="h-9 w-auto object-contain group-hover:scale-105 transition-transform" />
-                    <div class="hidden sm:flex flex-col border-l border-blue-800/80 pl-3">
-                        <span class="text-[10px] text-blue-200 uppercase tracking-widest font-semibold">PT Vinix Seven Aurum</span>
-                        <span class="text-[9px] text-blue-300/70">Kompas Karir Magang</span>
-                    </div>
+                <a href="{{ url('/') }}" class="flex items-center group">
+                    <img src="{{ asset('images/vinix7-logo.png') }}" alt="VINIX7" class="h-8 sm:h-9 w-auto object-contain group-hover:scale-105 transition-transform" />
                 </a>
 
                 <div class="flex items-center space-x-3 sm:space-x-4">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="inline-flex items-center px-4 py-2 text-xs sm:text-sm font-bold text-slate-950 bg-vinix-aurum hover:bg-amber-400 rounded-xl shadow-sm transition">
+                        <a href="{{ url('/dashboard') }}" class="inline-flex items-center px-4 py-2 text-xs sm:text-sm font-bold text-slate-950 bg-vinix-aurum hover:bg-amber-400 rounded-xl shadow-xs transition">
                             Masuk ke Dashboard
                             <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                             </svg>
                         </a>
                     @else
-                        <a href="{{ route('login') }}" class="text-xs sm:text-sm font-semibold text-blue-100 hover:text-white px-3 py-2 rounded-lg hover:bg-white/10 transition">
+                        <a href="{{ route('login') }}" class="text-xs sm:text-sm font-semibold text-slate-700 hover:text-vinix-navy px-3.5 py-2 rounded-xl hover:bg-slate-100 transition">
                             Masuk Portal
                         </a>
-                        <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 text-xs sm:text-sm font-bold text-slate-950 bg-gradient-to-r from-vinix-aurum to-amber-400 hover:from-amber-400 hover:to-amber-500 rounded-xl shadow-md transition">
+                        <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 text-xs sm:text-sm font-bold text-slate-950 bg-gradient-to-r from-vinix-aurum to-amber-400 hover:from-amber-400 hover:to-amber-500 rounded-xl shadow-xs transition active:scale-95">
                             Daftar Pelamar
                         </a>
                     @endauth
@@ -202,13 +198,9 @@
         <!-- Footer -->
         <footer class="bg-white border-t border-slate-200 py-10 mt-auto">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-                <div class="flex items-center space-x-3.5">
-                    <img src="{{ asset('images/vinix7-logo.png') }}" alt="VINIX7 Logo" class="h-6 w-auto object-contain" />
-                    <div class="border-l border-slate-200 pl-3">
-                        <span class="font-bold text-slate-800 text-sm block">PT Vinix Seven Aurum</span>
-                        <p class="text-slate-400 text-xs">Kompas Karir SPK Penempatan Divisi Magang</p>
-                    </div>
-                </div>
+                <a href="{{ url('/') }}" class="flex items-center">
+                    <img src="{{ asset('images/vinix7-logo.png') }}" alt="VINIX7" class="h-6 sm:h-7 w-auto object-contain" />
+                </a>
                 <div class="flex items-center space-x-6 text-slate-600 font-medium">
                     <a href="https://vinix7.id" target="_blank" class="hover:text-vinix-navy transition">Website Resmi vinix7.id</a>
                     <a href="{{ route('login') }}" class="hover:text-vinix-navy transition">Portal Login</a>
