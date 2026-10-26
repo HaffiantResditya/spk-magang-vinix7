@@ -19,7 +19,7 @@
     <body class="font-sans text-slate-800 antialiased min-h-full bg-gradient-to-br from-vinix-navy via-slate-900 to-blue-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md text-center">
             <a href="/" class="inline-flex items-center justify-center group">
-                <img src="{{ asset('images/vinix7-logo-white.png') }}" alt="VINIX7 Logo" class="h-11 w-auto object-contain drop-shadow-lg group-hover:scale-105 transition-transform" />
+                <x-application-logo variant="white" class="h-11 w-auto object-contain drop-shadow-lg group-hover:scale-105 transition-transform" />
             </a>
         </div>
 
