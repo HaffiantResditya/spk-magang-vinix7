@@ -71,3 +71,62 @@ window.addEventListener('swal:toast', event => {
         title: data.title || data.text || 'Berhasil'
     });
 });
+
+// Universal password visibility toggle helper (Vanilla JS)
+window.togglePasswordVisibility = function(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    const isPassword = input.type === 'password';
+    input.type = isPassword ? 'text' : 'password';
+
+    const eyeOpen = btn.querySelector('.eye-open-icon');
+    const eyeSlash = btn.querySelector('.eye-slash-icon');
+    if (eyeOpen && eyeSlash) {
+        if (isPassword) {
+            eyeOpen.classList.add('hidden');
+            eyeSlash.classList.remove('hidden');
+            btn.setAttribute('title', 'Sembunyikan Kata Sandi');
+        } else {
+            eyeOpen.classList.remove('hidden');
+            eyeSlash.classList.add('hidden');
+            btn.setAttribute('title', 'Tampilkan Kata Sandi');
+        }
+    }
+};
+
+// Universal logout confirmation dialog with SweetAlert2
+window.confirmLogout = function(event, formId = 'logout-form') {
+    if (event) event.preventDefault();
+    const form = document.getElementById(formId) || (event.target && event.target.closest('form'));
+    if (!form) return;
+
+    if (window.Swal) {
+        window.Swal.fire({
+            title: 'Konfirmasi Keluar',
+            text: 'Apakah Anda yakin ingin mengakhiri sesi dan keluar dari sistem?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#DC2626',
+            cancelButtonColor: '#94A3B8',
+            confirmButtonText: 'Ya, Keluar',
+            cancelButtonText: 'Batal',
+            reverseButtons: true,
+            customClass: {
+                popup: 'rounded-3xl border border-slate-100 shadow-2xl font-sans',
+                title: 'text-lg font-bold text-slate-900',
+                htmlContainer: 'text-sm text-slate-600',
+                confirmButton: 'px-5 py-2.5 rounded-xl font-bold text-sm text-white shadow-md bg-red-600 hover:bg-red-700',
+                cancelButton: 'px-5 py-2.5 rounded-xl font-semibold text-sm text-slate-700 bg-slate-100 hover:bg-slate-200 shadow-xs'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    } else {
+        if (confirm('Apakah Anda yakin ingin keluar dari sistem?')) {
+            form.submit();
+        }
+    }
+};
+

@@ -14,6 +14,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
     </head>
     <body class="font-sans text-slate-800 antialiased min-h-full bg-gradient-to-br from-vinix-navy via-slate-900 to-blue-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md text-center">
@@ -38,5 +39,29 @@
                 </a>
             </div>
         </div>
+
+        <script>
+            // Universal password visibility toggle helper (guaranteed 100% vanilla JS execution)
+            function togglePasswordVisibility(inputId, btn) {
+                const input = document.getElementById(inputId);
+                if (!input) return;
+                const isPassword = input.type === 'password';
+                input.type = isPassword ? 'text' : 'password';
+
+                const eyeOpen = btn.querySelector('.eye-open-icon');
+                const eyeSlash = btn.querySelector('.eye-slash-icon');
+                if (eyeOpen && eyeSlash) {
+                    if (isPassword) {
+                        eyeOpen.classList.add('hidden');
+                        eyeSlash.classList.remove('hidden');
+                        btn.setAttribute('title', 'Sembunyikan Kata Sandi');
+                    } else {
+                        eyeOpen.classList.remove('hidden');
+                        eyeSlash.classList.add('hidden');
+                        btn.setAttribute('title', 'Tampilkan Kata Sandi');
+                    }
+                }
+            }
+        </script>
     </body>
 </html>

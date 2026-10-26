@@ -115,9 +115,12 @@
 
                                 <div class="border-t border-slate-100 my-1"></div>
 
-                                <form method="POST" action="{{ route('logout') }}">
+                                <form method="POST" action="{{ route('logout') }}" id="logout-form-desktop">
                                     @csrf
-                                    <button type="submit" class="w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-red-50 font-semibold">
+                                    <button type="button" onclick="confirmLogout(event, 'logout-form-desktop')" class="w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-red-50 font-semibold cursor-pointer flex items-center">
+                                        <svg class="w-3.5 h-3.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                        </svg>
                                         Keluar (Logout)
                                     </button>
                                 </form>
@@ -168,9 +171,12 @@
                     <a href="{{ route('superadmin.matrix-weights') }}" class="block px-3 py-2 rounded-lg text-sm font-medium text-white hover:bg-blue-800">Dynamic Matrix Bobot</a>
                 @endif
 
-                <form method="POST" action="{{ route('logout') }}" class="pt-2">
+                <form method="POST" action="{{ route('logout') }}" id="logout-form-mobile" class="pt-2">
                     @csrf
-                    <button type="submit" class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-red-300 hover:bg-red-900/40">
+                    <button type="button" onclick="confirmLogout(event, 'logout-form-mobile')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-red-300 hover:bg-red-900/40 cursor-pointer flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
                         Keluar (Logout)
                     </button>
                 </form>
@@ -183,3 +189,40 @@
         @endauth
     </div>
 </nav>
+
+<script>
+    function confirmLogout(event, formId) {
+        if (event) event.preventDefault();
+        const form = document.getElementById(formId);
+        if (!form) return;
+
+        if (window.Swal) {
+            window.Swal.fire({
+                title: 'Konfirmasi Keluar',
+                text: 'Apakah Anda yakin ingin mengakhiri sesi dan keluar dari sistem?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#DC2626',
+                cancelButtonColor: '#94A3B8',
+                confirmButtonText: 'Ya, Keluar',
+                cancelButtonText: 'Batal',
+                reverseButtons: true,
+                customClass: {
+                    popup: 'rounded-3xl border border-slate-100 shadow-2xl font-sans',
+                    title: 'text-lg font-bold text-slate-900',
+                    htmlContainer: 'text-sm text-slate-600',
+                    confirmButton: 'px-5 py-2.5 rounded-xl font-bold text-sm text-white shadow-md bg-red-600 hover:bg-red-700',
+                    cancelButton: 'px-5 py-2.5 rounded-xl font-semibold text-sm text-slate-700 bg-slate-100 hover:bg-slate-200 shadow-xs'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        } else {
+            if (confirm('Apakah Anda yakin ingin keluar dari sistem?')) {
+                form.submit();
+            }
+        }
+    }
+</script>
