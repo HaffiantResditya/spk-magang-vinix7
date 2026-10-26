@@ -21,27 +21,38 @@
             <x-input-error :messages="$errors->get('email')" class="mt-1" />
         </div>
 
-        <!-- Applicant Type -->
-        <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Kategori Pelamar</label>
-            <div class="grid grid-cols-2 gap-3">
-                <label class="flex items-center p-2.5 rounded-xl border border-slate-200 cursor-pointer text-xs font-semibold text-slate-700 hover:bg-slate-50">
-                    <input type="radio" name="type" value="mahasiswa" checked class="text-vinix-navy focus:ring-vinix-navy mr-2">
-                    Mahasiswa Aktif
-                </label>
-                <label class="flex items-center p-2.5 rounded-xl border border-slate-200 cursor-pointer text-xs font-semibold text-slate-700 hover:bg-slate-50">
-                    <input type="radio" name="type" value="umum" class="text-vinix-navy focus:ring-vinix-navy mr-2">
-                    Umum / Fresh Grad
-                </label>
+        <!-- Applicant Type & Institution with dynamic hints -->
+        <div x-data="{ applicantType: '{{ old('type', 'mahasiswa') }}' }" class="space-y-4">
+            <!-- Applicant Type -->
+            <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Kategori Pelamar</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <label :class="applicantType === 'mahasiswa' ? 'bg-blue-50 border-vinix-navy text-vinix-navy font-bold ring-2 ring-vinix-navy/20' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'" class="flex items-center p-2.5 rounded-xl border cursor-pointer text-xs font-semibold transition-all">
+                        <input type="radio" name="type" value="mahasiswa" x-model="applicantType" class="text-vinix-navy focus:ring-vinix-navy mr-2">
+                        Mahasiswa Aktif
+                    </label>
+                    <label :class="applicantType === 'umum' ? 'bg-blue-50 border-vinix-navy text-vinix-navy font-bold ring-2 ring-vinix-navy/20' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'" class="flex items-center p-2.5 rounded-xl border cursor-pointer text-xs font-semibold transition-all">
+                        <input type="radio" name="type" value="umum" x-model="applicantType" class="text-vinix-navy focus:ring-vinix-navy mr-2">
+                        Umum / Fresh Grad
+                    </label>
+                </div>
+                <x-input-error :messages="$errors->get('type')" class="mt-1" />
             </div>
-            <x-input-error :messages="$errors->get('type')" class="mt-1" />
-        </div>
 
-        <!-- Institution -->
-        <div>
-            <label for="institution" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Asal Universitas / Instansi</label>
-            <input id="institution" class="w-full rounded-xl border-slate-200 text-sm focus:border-vinix-navy focus:ring-vinix-navy shadow-xs" type="text" name="institution" value="{{ old('institution') }}" placeholder="Contoh: Universitas Indonesia" required />
-            <x-input-error :messages="$errors->get('institution')" class="mt-1" />
+            <!-- Institution -->
+            <div>
+                <label for="institution" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                    <span x-show="applicantType === 'mahasiswa'">Asal Universitas / Kampus</span>
+                    <span x-show="applicantType === 'umum'" x-cloak>Asal Instansi / Universitas Almamater / Portofolio</span>
+                </label>
+                <input id="institution" class="w-full rounded-xl border-slate-200 text-sm focus:border-vinix-navy focus:ring-vinix-navy shadow-xs" type="text" name="institution" value="{{ old('institution') }}"
+                    :placeholder="applicantType === 'mahasiswa' ? 'Contoh: Universitas Indonesia / ITB' : 'Contoh: Alumni Univ. Brawijaya / PT Telkom / Freelance Web Dev'" required />
+                <p class="text-[11px] text-slate-400 mt-1">
+                    <span x-show="applicantType === 'mahasiswa'">Tuliskan nama universitas/politeknik tempat berkuliah.</span>
+                    <span x-show="applicantType === 'umum'" x-cloak>Isi nama kampus almamater kelulusan, instansi/perusahaan terakhir, atau 'Freelance'.</span>
+                </p>
+                <x-input-error :messages="$errors->get('institution')" class="mt-1" />
+            </div>
         </div>
 
         <!-- Phone -->

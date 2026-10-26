@@ -37,31 +37,41 @@
                     <span class="text-[11px] text-slate-400 mt-1 block">Email akun tidak dapat diubah secara langsung.</span>
                 </div>
 
-                <div>
+                <div x-data="{ applicantType: '{{ old('type', $user->profile?->type ?? 'mahasiswa') }}' }">
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Kategori Pelamar</label>
                     <div class="grid grid-cols-2 gap-4">
-                        <label class="relative flex items-center p-3 rounded-xl border cursor-pointer {{ old('type', $user->profile?->type ?? 'mahasiswa') === 'mahasiswa' ? 'bg-blue-50 border-vinix-navy text-vinix-navy font-bold' : 'bg-white border-slate-200 text-slate-700' }}">
-                            <input type="radio" name="type" value="mahasiswa" class="text-vinix-navy focus:ring-vinix-navy mr-2" {{ old('type', $user->profile?->type ?? 'mahasiswa') === 'mahasiswa' ? 'checked' : '' }}>
+                        <label :class="applicantType === 'mahasiswa' ? 'bg-blue-50 border-vinix-navy text-vinix-navy font-bold ring-2 ring-vinix-navy/20' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'" class="relative flex items-center p-3 rounded-xl border cursor-pointer transition-all">
+                            <input type="radio" name="type" value="mahasiswa" x-model="applicantType" class="text-vinix-navy focus:ring-vinix-navy mr-2">
                             <span>Mahasiswa Aktif</span>
                         </label>
-                        <label class="relative flex items-center p-3 rounded-xl border cursor-pointer {{ old('type', $user->profile?->type) === 'umum' ? 'bg-blue-50 border-vinix-navy text-vinix-navy font-bold' : 'bg-white border-slate-200 text-slate-700' }}">
-                            <input type="radio" name="type" value="umum" class="text-vinix-navy focus:ring-vinix-navy mr-2" {{ old('type', $user->profile?->type) === 'umum' ? 'checked' : '' }}>
+                        <label :class="applicantType === 'umum' ? 'bg-blue-50 border-vinix-navy text-vinix-navy font-bold ring-2 ring-vinix-navy/20' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'" class="relative flex items-center p-3 rounded-xl border cursor-pointer transition-all">
+                            <input type="radio" name="type" value="umum" x-model="applicantType" class="text-vinix-navy focus:ring-vinix-navy mr-2">
                             <span>Umum / Fresh Graduate</span>
                         </label>
                     </div>
                     @error('type')
                         <span class="text-xs text-red-600 mt-1 block">{{ $message }}</span>
                     @enderror
-                </div>
 
-                <div>
-                    <label for="institution" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Asal Universitas / Instansi</label>
-                    <input type="text" id="institution" name="institution" value="{{ old('institution', $user->profile?->institution) }}" required
-                        placeholder="Contoh: Universitas Indonesia / Politeknik Negeri"
-                        class="w-full rounded-xl border-slate-200 text-sm focus:border-vinix-navy focus:ring-vinix-navy shadow-xs">
-                    @error('institution')
-                        <span class="text-xs text-red-600 mt-1 block">{{ $message }}</span>
-                    @enderror
+                    <div class="mt-5">
+                        <label for="institution" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                            <span x-show="applicantType === 'mahasiswa'">Asal Universitas / Perguruan Tinggi</span>
+                            <span x-show="applicantType === 'umum'" x-cloak>Asal Instansi / Universitas Almamater / Portofolio</span>
+                        </label>
+                        <input type="text" id="institution" name="institution" value="{{ old('institution', $user->profile?->institution) }}" required
+                            :placeholder="applicantType === 'mahasiswa' ? 'Contoh: Universitas Indonesia / ITB / Politeknik Negeri' : 'Contoh: Alumni Universitas Brawijaya / PT Telkom / Freelance Web Dev'"
+                            class="w-full rounded-xl border-slate-200 text-sm focus:border-vinix-navy focus:ring-vinix-navy shadow-xs">
+                        <p class="text-[11px] text-slate-500 mt-1.5 flex items-center">
+                            <svg class="w-3.5 h-3.5 mr-1.5 text-vinix-navy flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                            </svg>
+                            <span x-show="applicantType === 'mahasiswa'">Bagi mahasiswa aktif, isi nama kampus tempat Anda berkuliah saat ini.</span>
+                            <span x-show="applicantType === 'umum'" x-cloak>Bagi pelamar umum/fresh grad, Anda dapat menulis nama kampus almamater kelulusan, nama perusahaan/instansi terakhir, atau "Freelance / Independen".</span>
+                        </p>
+                        @error('institution')
+                            <span class="text-xs text-red-600 mt-1 block">{{ $message }}</span>
+                        @enderror
+                    </div>
                 </div>
 
                 <div>
