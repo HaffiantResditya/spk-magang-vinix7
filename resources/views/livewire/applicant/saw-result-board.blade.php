@@ -103,7 +103,19 @@
             </div>
         @endif
 
-        <form wire:submit.prevent="submitFinalApplication" class="space-y-6">
+        <form wire:submit.prevent="submitFinalApplication"
+            @submit.prevent="window.confirmDialog({
+                title: 'Konfirmasi Pengiriman Lamaran',
+                text: 'Apakah Anda yakin ingin mengirimkan berkas lamaran untuk divisi ini? Dokumen CV dan skor preferensi SAW akan diserahkan ke tim HRD.',
+                icon: 'question',
+                confirmText: 'Ya, Kirim Lamaran',
+                confirmColor: '#0F172A'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    $wire.submitFinalApplication();
+                }
+            })"
+            class="space-y-6">
             <!-- Selected Division Confirmation -->
             <div class="bg-blue-50/60 border border-blue-200/70 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>

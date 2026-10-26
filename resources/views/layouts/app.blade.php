@@ -38,6 +38,24 @@
                     </svg>
                     <span>{{ session('success') }}</span>
                 </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        if (window.Swal) {
+                            window.Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: @json(session('success')),
+                                confirmButtonColor: '#0F172A',
+                                confirmButtonText: 'Lanjutkan',
+                                customClass: {
+                                    popup: 'rounded-3xl border border-slate-100 shadow-2xl font-sans',
+                                    title: 'text-xl font-bold text-slate-900',
+                                    confirmButton: 'px-6 py-2.5 rounded-xl font-bold text-sm bg-slate-900 text-white shadow-md'
+                                }
+                            });
+                        }
+                    });
+                </script>
             @endif
 
             @if(session('error'))
@@ -47,6 +65,24 @@
                     </svg>
                     <span>{{ session('error') }}</span>
                 </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        if (window.Swal) {
+                            window.Swal.fire({
+                                icon: 'error',
+                                title: 'Terjadi Kesalahan',
+                                text: @json(session('error')),
+                                confirmButtonColor: '#0F172A',
+                                confirmButtonText: 'Tutup',
+                                customClass: {
+                                    popup: 'rounded-3xl border border-slate-100 shadow-2xl font-sans',
+                                    title: 'text-xl font-bold text-slate-900',
+                                    confirmButton: 'px-6 py-2.5 rounded-xl font-bold text-sm bg-slate-900 text-white shadow-md'
+                                }
+                            });
+                        }
+                    });
+                </script>
             @endif
 
             @if(session('warning'))
@@ -56,6 +92,24 @@
                     </svg>
                     <span>{{ session('warning') }}</span>
                 </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        if (window.Swal) {
+                            window.Swal.fire({
+                                icon: 'warning',
+                                title: 'Peringatan',
+                                text: @json(session('warning')),
+                                confirmButtonColor: '#0F172A',
+                                confirmButtonText: 'Mengerti',
+                                customClass: {
+                                    popup: 'rounded-3xl border border-slate-100 shadow-2xl font-sans',
+                                    title: 'text-xl font-bold text-slate-900',
+                                    confirmButton: 'px-6 py-2.5 rounded-xl font-bold text-sm bg-slate-900 text-white shadow-md'
+                                }
+                            });
+                        }
+                    });
+                </script>
             @endif
         </div>
 

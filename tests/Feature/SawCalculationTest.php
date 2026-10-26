@@ -9,10 +9,13 @@ use App\Models\MatrixWeight;
 use App\Models\Question;
 use App\Models\User;
 use App\Services\SawCalculationService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class SawCalculationTest extends TestCase
 {
+    use RefreshDatabase;
+
     protected function setUp(): void
     {
         parent::setUp();

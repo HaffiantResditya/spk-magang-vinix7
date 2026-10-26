@@ -73,7 +73,8 @@
                 </div>
 
                 @if($applicant->application)
-                    <form method="POST" action="{{ route('hrd.applicants.updateStatus', $applicant->application->id) }}" class="space-y-4">
+                    <form method="POST" action="{{ route('hrd.applicants.updateStatus', $applicant->application->id) }}" class="space-y-4"
+                        onsubmit="event.preventDefault(); window.confirmDialog({ title: 'Simpan Keputusan Seleksi?', text: 'Keputusan status pelamar (Approve/Reassign/Reject) akan disimpan dan langsung diperbarui di portal pelamar.', icon: 'question', confirmText: 'Ya, Simpan Keputusan', confirmColor: '#0F172A' }).then(res => { if(res.isConfirmed) this.submit(); });">
                         @csrf
                         @method('PUT')
 

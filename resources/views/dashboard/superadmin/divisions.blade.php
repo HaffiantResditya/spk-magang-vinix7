@@ -62,7 +62,8 @@
                                         class="text-xs font-bold text-blue-600 hover:underline">
                                         Edit
                                     </button>
-                                    <form method="POST" action="{{ route('superadmin.divisions.destroy', $div->id) }}" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus divisi ini?')">
+                                    <form method="POST" action="{{ route('superadmin.divisions.destroy', $div->id) }}" class="inline"
+                                        onsubmit="event.preventDefault(); window.confirmDialog({ title: 'Hapus Divisi {{ addslashes($div->name) }}?', text: 'Seluruh bobot matriks kriteria untuk divisi ini akan dihapus secara permanen.', icon: 'warning', confirmText: 'Ya, Hapus Divisi', confirmColor: '#DC2626' }).then(res => { if(res.isConfirmed) this.submit(); });">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="text-xs font-bold text-red-600 hover:underline">

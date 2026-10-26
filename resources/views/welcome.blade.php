@@ -51,7 +51,7 @@
             <div class="max-w-5xl mx-auto text-center relative z-10 space-y-6">
                 <div class="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold bg-vinix-aurum/20 text-vinix-aurum border border-vinix-aurum/40 shadow-xs">
                     <span class="w-2 h-2 rounded-full bg-vinix-aurum mr-2 animate-ping"></span>
-                    Magang & Studi Independen BATCH 5 &bull; Learn. Build. Impact.
+                    Magang & Studi Independen &bull; Learn. Build. Impact.
                 </div>
 
                 <h1 class="text-4xl sm:text-6xl font-black tracking-tight leading-tight">
@@ -88,7 +88,7 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-12 text-left max-w-4xl mx-auto">
                     <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10">
                         <span class="text-3xl font-extrabold text-vinix-aurum">14</span>
-                        <p class="text-xs text-blue-200 mt-1">Pilihan Open Roles Batch 5</p>
+                        <p class="text-xs text-blue-200 mt-1">Pilihan Divisi Magang</p>
                     </div>
                     <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10">
                         <span class="text-3xl font-extrabold text-vinix-aurum">7</span>
@@ -114,9 +114,9 @@
         <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div class="text-center space-y-3 mb-12">
                 <span class="text-xs font-bold uppercase tracking-wider text-vinix-navy bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
-                    Program Magang & Studi Independen Batch 5
+                    Program Magang & Studi Independen
                 </span>
-                <h2 class="text-3xl font-extrabold text-slate-900">14 Pilihan Divisi (Open Roles)</h2>
+                <h2 class="text-3xl font-extrabold text-slate-900">14 Pilihan Divisi Magang</h2>
                 <p class="text-sm text-slate-500 max-w-2xl mx-auto">
                     Kesempatan untuk mengembangkan skill, mengerjakan project nyata, dan berdampak bersama VINIX7.
                 </p>
@@ -131,7 +131,7 @@
                     ['name' => 'Data Analyst', 'badge' => 'Data & BI', 'color' => 'sky'],
                     ['name' => 'Bisnis Digital Analyst', 'badge' => 'Business', 'color' => 'emerald'],
                     ['name' => 'Python Machine Learning & AI Engineer', 'badge' => 'AI & ML', 'color' => 'purple'],
-                    ['name' => 'Cybersecurity Engineer', 'badge' => 'Cyber Infra', 'color' => 'cyan'],
+                    ['name' => 'Cybersecurity Engineer', 'badge' => 'Cybersecurity & Infra', 'color' => 'cyan'],
                     ['name' => 'Web & UIUX Developer', 'badge' => 'Web & UI/UX', 'color' => 'blue'],
                     ['name' => 'Investment & Financial Market Analyst', 'badge' => 'Finance', 'color' => 'amber'],
                     ['name' => 'Social Media & Digital Marketing Strategist', 'badge' => 'Marketing', 'color' => 'pink'],
@@ -150,7 +150,7 @@
                             </span>
                             <div>
                                 <h3 class="font-bold text-slate-900 text-sm sm:text-base leading-snug">{{ $r['name'] }}</h3>
-                                <span class="text-[11px] text-slate-400">Open Role Batch 5</span>
+                                <span class="text-[11px] text-slate-400">Divisi Magang VINIX7</span>
                             </div>
                         </div>
                         <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700 flex-shrink-0">
