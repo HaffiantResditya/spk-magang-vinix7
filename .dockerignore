@@ -1,0 +1,7 @@
+/node_modules
+/public/hot
+.env
+.git
+.phpunit.result.cache
+npm-debug.log
+yarn-error.log
