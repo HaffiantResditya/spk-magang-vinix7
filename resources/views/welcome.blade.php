@@ -13,26 +13,26 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased text-slate-800 bg-vinix-bg min-h-full flex flex-col selection:bg-vinix-aurum selection:text-slate-900">
-        <!-- Enterprise Header (Deep Executive Navy Glassmorphism) -->
-        <header class="bg-gradient-to-r from-vinix-navy via-slate-900 to-blue-950/95 backdrop-blur-md border-b border-white/10 text-white shadow-xl sticky top-0 z-50">
+        <!-- Enterprise Header (Clean Executive White with Authentic Colored Logo) -->
+        <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/90 text-slate-800 shadow-xs sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
                 <a href="{{ url('/') }}" class="flex items-center group">
-                    <x-application-logo variant="white" class="h-8 sm:h-9 w-auto drop-shadow-md group-hover:scale-105 transition-transform" />
+                    <x-application-logo variant="colored" class="h-8 sm:h-9 w-auto object-contain group-hover:scale-105 transition-transform" />
                 </a>
 
                 <div class="flex items-center space-x-3 sm:space-x-4">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="inline-flex items-center px-4 py-2 text-xs sm:text-sm font-bold text-slate-950 bg-gradient-to-r from-vinix-aurum to-amber-400 hover:from-amber-400 hover:to-amber-500 rounded-xl shadow-lg shadow-amber-500/20 active:scale-95 transition">
+                        <a href="{{ url('/dashboard') }}" class="inline-flex items-center px-4 py-2 text-xs sm:text-sm font-bold text-slate-950 bg-gradient-to-r from-vinix-aurum to-amber-400 hover:from-amber-400 hover:to-amber-500 rounded-xl shadow-xs transition active:scale-95">
                             Masuk ke Dashboard
                             <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                             </svg>
                         </a>
                     @else
-                        <a href="{{ route('login') }}" class="text-xs sm:text-sm font-semibold text-slate-200 hover:text-white px-3.5 py-2 rounded-xl hover:bg-white/10 transition">
+                        <a href="{{ route('login') }}" class="text-xs sm:text-sm font-semibold text-slate-700 hover:text-vinix-navy px-3.5 py-2 rounded-xl hover:bg-slate-100 transition">
                             Masuk Portal
                         </a>
-                        <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 text-xs sm:text-sm font-bold text-slate-950 bg-gradient-to-r from-vinix-aurum to-amber-400 hover:from-amber-400 hover:to-amber-500 rounded-xl shadow-lg shadow-amber-500/20 active:scale-95 transition">
+                        <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 text-xs sm:text-sm font-bold text-slate-950 bg-gradient-to-r from-vinix-aurum to-amber-400 hover:from-amber-400 hover:to-amber-500 rounded-xl shadow-xs transition active:scale-95">
                             Daftar Pelamar
                         </a>
                     @endauth

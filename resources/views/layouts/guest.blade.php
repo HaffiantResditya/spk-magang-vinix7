@@ -18,8 +18,8 @@
     </head>
     <body class="font-sans text-slate-800 antialiased min-h-full bg-gradient-to-br from-vinix-navy via-slate-900 to-blue-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md text-center">
-            <a href="/" class="inline-flex items-center justify-center group">
-                <x-application-logo variant="white" class="h-11 w-auto object-contain drop-shadow-lg group-hover:scale-105 transition-transform" />
+            <a href="/" class="inline-flex items-center justify-center py-2.5 px-6 rounded-2xl bg-white shadow-xl border border-white/20 group hover:shadow-2xl transition-all">
+                <x-application-logo variant="colored" class="h-8 w-auto object-contain group-hover:scale-105 transition-transform" />
             </a>
         </div>
 
