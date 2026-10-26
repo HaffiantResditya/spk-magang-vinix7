@@ -126,7 +126,13 @@ class ApplicantController extends Controller
         ]);
 
         // Upload CV
-        $path = $request->file('cv_file')->store('cv_uploads', 'public');
+        try {
+            $cloudinary = app(\App\Services\CloudinaryService::class);
+            $path = $cloudinary->uploadCv($request->file('cv_file'), $user->id);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Cloudinary upload failed, falling back to local storage: ' . $e->getMessage());
+            $path = $request->file('cv_file')->store('cv_uploads', 'public');
+        }
 
         $user->profile()->updateOrCreate(
             ['user_id' => $user->id],

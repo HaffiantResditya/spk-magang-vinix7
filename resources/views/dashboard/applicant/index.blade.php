@@ -172,7 +172,7 @@
                     <div>
                         <span class="text-xs text-slate-400 block font-medium">Dokumen CV</span>
                         @if($user->profile?->cv_path)
-                            <a href="{{ asset('storage/' . $user->profile->cv_path) }}" target="_blank" class="inline-flex items-center text-xs font-bold text-vinix-navy hover:underline mt-1">
+                            <a href="{{ $user->profile->cv_url }}" target="_blank" class="inline-flex items-center text-xs font-bold text-vinix-navy hover:underline mt-1">
                                 <svg class="w-4 h-4 mr-1 text-red-500" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd" />
                                 </svg>
