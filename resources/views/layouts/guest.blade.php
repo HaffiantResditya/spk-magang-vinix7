@@ -18,14 +18,9 @@
     </head>
     <body class="font-sans text-slate-800 antialiased min-h-full bg-gradient-to-br from-vinix-navy via-slate-900 to-blue-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md text-center">
-            <a href="/" class="inline-flex items-center space-x-3 group">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-vinix-aurum to-amber-300 flex items-center justify-center font-black text-slate-950 text-2xl shadow-xl group-hover:scale-105 transition-transform">
-                    7
-                </div>
-                <div class="text-left">
-                    <span class="text-2xl font-black tracking-wider text-white">VINIX<span class="text-vinix-aurum">7</span></span>
-                    <span class="text-[11px] text-blue-200 block uppercase tracking-widest font-semibold">PT Vinix Seven Aurum</span>
-                </div>
+            <a href="/" class="inline-flex flex-col items-center group">
+                <img src="{{ asset('images/vinix7-logo-white.png') }}" alt="VINIX7 Logo" class="h-12 w-auto object-contain drop-shadow-lg group-hover:scale-105 transition-transform" />
+                <span class="text-xs text-blue-200/90 block uppercase tracking-widest font-semibold mt-3">Kompas Karir SPK • PT Vinix Seven Aurum</span>
             </a>
         </div>
 

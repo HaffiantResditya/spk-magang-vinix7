@@ -16,15 +16,13 @@
         <!-- Enterprise Header -->
         <header class="bg-vinix-navy border-b border-blue-950 text-white shadow-md">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-vinix-aurum to-amber-300 flex items-center justify-center font-black text-slate-950 text-xl shadow-lg">
-                        7
+                <a href="{{ url('/') }}" class="flex items-center space-x-3 group">
+                    <img src="{{ asset('images/vinix7-logo-white.png') }}" alt="VINIX7 Logo" class="h-9 w-auto object-contain group-hover:scale-105 transition-transform" />
+                    <div class="hidden sm:flex flex-col border-l border-blue-800/80 pl-3">
+                        <span class="text-[10px] text-blue-200 uppercase tracking-widest font-semibold">PT Vinix Seven Aurum</span>
+                        <span class="text-[9px] text-blue-300/70">Kompas Karir Magang</span>
                     </div>
-                    <div>
-                        <span class="text-xl sm:text-2xl font-black tracking-wider text-white">VINIX<span class="text-vinix-aurum">7</span></span>
-                        <span class="text-[10px] text-blue-200 block uppercase tracking-widest font-semibold">PT Vinix Seven Aurum</span>
-                    </div>
-                </div>
+                </a>
 
                 <div class="flex items-center space-x-3 sm:space-x-4">
                     @auth
@@ -204,11 +202,11 @@
         <!-- Footer -->
         <footer class="bg-white border-t border-slate-200 py-10 mt-auto">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-                <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 rounded-lg bg-vinix-navy flex items-center justify-center text-vinix-aurum font-black">7</div>
-                    <div>
-                        <span class="font-bold text-slate-800 text-sm">PT Vinix Seven Aurum</span>
-                        <p class="text-slate-400">Kompas Karir SPK Penempatan Divisi Magang</p>
+                <div class="flex items-center space-x-3.5">
+                    <img src="{{ asset('images/vinix7-logo.png') }}" alt="VINIX7 Logo" class="h-6 w-auto object-contain" />
+                    <div class="border-l border-slate-200 pl-3">
+                        <span class="font-bold text-slate-800 text-sm block">PT Vinix Seven Aurum</span>
+                        <p class="text-slate-400 text-xs">Kompas Karir SPK Penempatan Divisi Magang</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-6 text-slate-600 font-medium">

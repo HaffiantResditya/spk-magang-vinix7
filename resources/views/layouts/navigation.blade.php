@@ -5,13 +5,11 @@
             <div class="flex items-center">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ url('/') }}" class="flex items-center space-x-2.5 group">
-                        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-vinix-aurum to-amber-300 flex items-center justify-center font-black text-slate-950 shadow-md group-hover:scale-105 transition-transform">
-                            7
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="font-extrabold text-lg tracking-wider text-white leading-tight">VINIX<span class="text-vinix-aurum">7</span></span>
-                            <span class="text-[10px] text-blue-200 tracking-widest uppercase font-semibold">Kompas Karir SPK</span>
+                    <a href="{{ url('/') }}" class="flex items-center space-x-3 group">
+                        <img src="{{ asset('images/vinix7-logo-white.png') }}" alt="VINIX7 Logo" class="h-8 w-auto object-contain group-hover:scale-105 transition-transform" />
+                        <div class="hidden sm:flex flex-col border-l border-blue-900/80 pl-3">
+                            <span class="text-[10px] text-blue-200 tracking-wider uppercase font-semibold leading-tight">Kompas Karir SPK</span>
+                            <span class="text-[9px] text-blue-300/70 leading-tight">PT Vinix Seven Aurum</span>
                         </div>
                     </a>
                 </div>
