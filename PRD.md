@@ -1,51 +1,64 @@
 # Product Requirements Document (PRD)
-**Sistem Pendukung Keputusan (SPK) Rekomendasi Penempatan Divisi Magang**
-**Studi Kasus:** PT Vinix Seven Aurum (VINIX7) - Batch 5
-
-## 1. Pendahuluan
-### 1.1 Latar Belakang
-PT Vinix Seven Aurum menyediakan 14 pilihan divisi magang spesifik di bidang IT dan Bisnis pada Program Magang & Studi Independen Batch 5. Banyak pelamar (mahasiswa dan umum) yang kesulitan memilih divisi yang tepat sesuai dengan keahlian mereka. Untuk menyelesaikan masalah ini, dibangun sebuah SPK berbasis *web* yang berfungsi sebagai "Kompas Karir". Sistem ini ditujukan *secara eksklusif* bagi pelamar yang belum mengetahui arah kompetensinya, mewajibkan mereka melewati tes asesmen untuk mendapatkan rekomendasi berbasis data sebelum mengirimkan lamaran final.
-
-### 1.2 Tujuan
-Membangun SPK menggunakan algoritma *Simple Additive Weighting* (SAW) yang mengotomatisasi pemetaan kompetensi pelamar ke dalam 14 divisi, mempermudah HRD dalam mengambil keputusan seleksi, dan memberikan kepastian status pelamar melalui portal mandiri.
+**Sistem Pendukung Keputusan (SPK) Rekomendasi Penempatan Divisi Magang**  
+**Studi Kasus:** PT Vinix Seven Aurum (VINIX7)
 
 ---
 
-## 2. Pedoman UI/UX (Integrasi Tema vinix7.id)
-Desain antarmuka akan mengadaptasi identitas visual dari situs resmi perusahaan (vinix7.id) untuk menjaga konsistensi *branding* *enterprise*:
-*   **Warna Utama (Primary - Brand):** **Deep Navy / Royal Blue** (Kode Tailwind: `blue-900` / `blue-800`). Digunakan untuk *header*, *sidebar*, tombol utama, dan elemen yang membutuhkan *trust* (kepercayaan) dan profesionalisme teknologi.
-*   **Warna Aksen (Secondary - Aurum):** **Gold / Kuning Emas** (Kode Tailwind: `yellow-500` / `amber-500`). Merujuk pada nama "Aurum" dan visi "Indonesia Emas". Digunakan untuk *highlight* Top 3 Rekomendasi SAW, *badge* status, dan elemen *Call to Action* (CTA).
-*   **Warna Latar (Background):** **Off-White / Slate 50** (Kode Tailwind: `slate-50`). Memberikan kesan *clean*, luas, dan fokus pada pembacaan kuesioner.
-*   **Tipografi:** Menggunakan *font* Sans-Serif modern dan *clean* seperti **Inter** atau **Poppins** (merepresentasikan inovasi dan edukasi).
-*   **Komponen UI:** Menggunakan *card-based layout* dengan *shadow* yang lembut (Tailwind `shadow-md`), ujung elemen sedikit membulat (`rounded-lg`), dan animasi *smooth* saat berpindah soal kuesioner (menggunakan Livewire).
+## 1. Pendahuluan
+
+### 1.1 Latar Belakang
+PT Vinix Seven Aurum menyediakan 14 pilihan divisi magang spesifik di bidang Teknologi Informasi dan Bisnis pada Program Magang & Studi Independen. Banyak pelamar (baik mahasiswa maupun umum) menghadapi dilema dan ketidakpastian dalam menentukan divisi yang paling relevan dengan minat dan kemampuan teknis mereka. 
+
+Untuk mengatasi kendala ini, dibangun Sistem Pendukung Keputusan (SPK) berbasis *web* yang berfungsi sebagai **"Kompas Karir"**. Sistem ini memandu pelamar melewati serangkaian asesmen kompetensi terukur untuk menghasilkan rekomendasi divisi berbasis data sebelum mengirimkan berkas lamaran resmi kepada HRD.
+
+### 1.2 Tujuan
+1. Mengotomatisasi pemetaan kompetensi pelamar ke dalam 14 divisi menggunakan algoritma **Simple Additive Weighting (SAW)**.
+2. Memfasilitasi HRD dalam meninjau data analitik pelamar dan mengeksekusi keputusan rekrutmen secara transparan.
+3. Memberikan pengalaman portal mandiri bagi pelamar untuk memantau status lamaran secara *real-time*.
+4. Mengimplementasikan infrastruktur cloud modern (*Serverless Database*, *Cloud Document Storage*, dan *Serverless Deployment*) yang skalabel dan efisien.
+
+---
+
+## 2. Pedoman Desain & UI/UX (Identitas vinix7.id)
+
+Antarmuka aplikasi mengadopsi standar identitas visual *enterprise* dari situs resmi perusahaan [vinix7.id](https://vinix7.id/):
+*   **Warna Utama (*Primary - Navy*):** **`#1e3a8a`** (`blue-900` / `blue-800`). Mewakili kepercayaan (*trust*), kestabilan, dan profesionalisme teknologi informasi. Digunakan pada navbar, sidebar, header, dan tombol utama.
+*   **Warna Aksen (*Secondary - Aurum*):** **`#eab308`** (`yellow-500` / `amber-500`). Merujuk pada nama "Aurum" dan visi "Indonesia Emas". Digunakan khusus untuk menonjolkan Top 3 Rekomendasi SAW, badge status, dan elemen *Call to Action* (CTA).
+*   **Warna Latar (*Background*):** **`#f8fafc`** (`slate-50`). Memberikan kesan bersih, luas, dan nyaman di mata saat membaca instrumen kuesioner.
+*   **Tipografi:** Font Sans-Serif modern (**Inter**).
+*   **Mikro-Interaksi & Feedback:**
+    *   *Password Visibility Toggle:* Ikon mata interaktif untuk melihat/menyembunyikan kata sandi pada halaman login dan registrasi.
+    *   *SweetAlert2:* Modal dialog profesional untuk konfirmasi pengiriman lamaran, penghapusan data master, eksekusi keputusan HRD, konfirmasi logout, dan notifikasi kegagalan autentikasi (*Autentikasi Gagal*).
 
 ---
 
 ## 3. Alur Pengguna (User Journey)
+
 ### 3.1 Aktor: Pelamar (Mahasiswa / Umum)
-1.  **Registrasi & Login (Wajib):** Pelamar membuat akun (Nama, Email, Password). Ini diperlukan agar pelamar bisa kembali masuk untuk mengecek status lamaran.
-2.  **Isi Biodata:** Melengkapi profil (Status: Mahasiswa/Umum, Asal Instansi/Universitas, No. WhatsApp).
-3.  **Self-Assessment (Kuesioner):** Menjawab 18 pertanyaan (mewakili kriteria C1-C7) menggunakan skala nilai (20 - 100). Didesain dengan *Multi-step form*.
-4.  **Hasil Analisis SAW:** Sistem menampilkan **Top 3 Divisi** dengan persentase kecocokan tertinggi. Dihiasi dengan warna *Gold/Aurum* untuk menonjolkan rekomendasi.
-5.  **Finalisasi:** Pelamar memilih salah satu dari Top 3 tersebut, mengunggah *file* CV (PDF), lalu menekan tombol *Submit*.
-6.  **Cek Status:** Pelamar dapat login kapan saja untuk melihat *badge* status lamarannya (Pending, Diterima, atau Ditolak).
+1.  **Registrasi & Login (Wajib):** Mendaftarkan akun dengan nama, email, dan kata sandi yang aman.
+2.  **Lengkapi Biodata:** Mengisi profil dengan kategori pelamar (Mahasiswa atau Umum), nama perguruan tinggi/instansi asal, dan nomor WhatsApp aktif. Formulir menyediakan petunjuk dinamis sesuai kategori yang dipilih.
+3.  **Self-Assessment (Kuesioner Livewire):** Menjawab 18 pertanyaan kompetensi (mencakup kriteria C1–C7) dengan skala nilai bertingkat (20–100) melalui formulir multi-langkah (*multi-step*) tanpa *reload* halaman.
+4.  **Hasil Analisis SAW:** Sistem menampilkan **Top 3 Divisi Rekomendasi** dengan persentase kecocokan tertinggi berbalut aksen emas (*Aurum*).
+5.  **Finalisasi Lamaran & Unggah CV:** Pelamar memilih salah satu dari divisi yang direkomendasikan, mengunggah dokumen CV dalam format PDF (otomatis disimpan ke **Cloudinary**), lalu mengirimkan lamaran.
+6.  **Pemantauan Status:** Pelamar dapat login kembali sewaktu-waktu untuk melihat status berkas (Pending, Diterima, Ditolak, atau Dialihkan).
 
 ### 3.2 Aktor: Admin HRD
-1.  **Dashboard Utama:** Melihat statistik analitik (Total pelamar SPK, divisi paling sering direkomendasikan, grafik pelamar Mahasiswa vs Umum).
-2.  **Review Pelamar:** Melihat tabel daftar pelamar. Membuka detail pelamar untuk melihat skor mentah 18 kuesioner dan persentase hasil SAW.
-3.  **Eksekusi (Approval System):** Menentukan nasib pelamar:
-    *   *Approve:* Diterima di divisi pilihan pelamar.
-    *   *Reassign:* Diterima, tapi dipindah ke rekomendasi SAW urutan ke-2 atau ke-3 (atas pertimbangan kuota/wawancara HRD).
-    *   *Reject:* Ditolak.
+1.  **Dashboard Analitik:** Memantau rekapitulasi data pelamar, distribusi divisi yang diminati, serta rasio pelamar Mahasiswa vs Umum.
+2.  **Review Detail Pelamar:** Meninjau lembar jawaban mentah 18 kuesioner, hasil komputasi SAW, serta mengakses berkas CV pelamar langsung melalui tautan Cloudinary HTTPS.
+3.  **Approval System (Eksekusi Keputusan):**
+    *   *Approve:* Menerima pelamar pada divisi pilihannya.
+    *   *Reassign:* Mengalihkan penerimaan pelamar ke rekomendasi peringkat ke-2 atau ke-3 berdasarkan evaluasi HRD atau kuota divisi.
+    *   *Reject:* Menolak lamaran.
 
 ### 3.3 Aktor: Super Admin
-1.  **Manajemen Master Data:** Mengelola 14 Data Divisi, 7 Kriteria Inti (C1-C7), dan 18 Pertanyaan Kuesioner.
-2.  **Manajemen Bobot (W):** Mengatur *Weighting Matrix* algoritma SAW (14 x 7 = 98 bobot).
+1.  **Manajemen Master Data:** Mengelola 14 Data Divisi, 7 Kriteria Inti, dan 18 Pertanyaan Kuesioner.
+2.  **Manajemen Bobot (W):** Mengatur persentase matriks pembobotan algoritma SAW (14 divisi x 7 kriteria = 98 relasi bobot) secara dinamis tanpa perlu mengubah kode sumber aplikasi.
 
 ---
 
 ## 4. Logika Sistem Algoritma SAW
-1.  **Alternatif (A):** 14 Divisi Magang (Open Roles Batch 5):
+
+1.  **Alternatif ($A_i$):** 14 Divisi Magang:
     1. Human Resource (SDM) Analyst
     2. Python Data Science Engineer
     3. Data Analyst
@@ -60,54 +73,75 @@ Desain antarmuka akan mengadaptasi identitas visual dari situs resmi perusahaan 
     12. Investment & Financial Market Analyst
     13. Business Administration Intelligence Analyst (Power BI & Excel)
     14. Cybercrime & Forensic Investigator
-2.  **Kriteria (C):** C1(Web/UIUX), C2(AI/Python), C3(Data/SQL), C4(Cyber), C5(Manajemen IT), C6(Komunikasi/SDM), C7(Keuangan).
-3.  **Sifat Kriteria:** Seluruh kriteria bernilai **Benefit** (Semakin tinggi nilai jawaban pelamar, semakin baik).
-4.  **Tahapan Komputasi *Backend*:**
-    *   Menarik nilai input kuesioner pelamar (Matriks Keputusan *X*).
-    *   Melakukan Normalisasi (Matriks *R*). Karena semua kriteria *Benefit*, rumusnya adalah *Nilai Input / Nilai Maksimal*.
-    *   Melakukan perkalian Matriks *R* dengan Bobot *W* milik masing-masing divisi.
-    *   Menjumlahkan hasil kali untuk mendapatkan Nilai Preferensi (*V*).
-    *   Mengurutkan Nilai *V* secara *Descending* dan mengambil 3 teratas (Top 3).
+
+2.  **Kriteria ($C_j$):**
+    *   $C_1$: Web, Frontend & UI/UX Design
+    *   $C_2$: Artificial Intelligence, Machine Learning & Python Programming
+    *   $C_3$: Data Analytics, Business Intelligence & SQL
+    *   $C_4$: Cyber Security, Ethical Hacking & Digital Forensics
+    *   $C_5$: IT Project Management & Software Architecture
+    *   $C_6$: Digital Marketing, Public Relations & Human Resources
+    *   $C_7$: Financial Modeling & Market Investment Analysis
+
+3.  **Sifat Kriteria:** Seluruh kriteria bertipe **Benefit** (semakin tinggi skor asesmen pelamar, semakin tinggi kesesuaian nilai).
+
+4.  **Tahapan Komputasi:**
+    *   Membentuk Matriks Keputusan $X$ dari akumulasi jawaban pelamar per kriteria.
+    *   Normalisasi Matriks $R$:
+        $$r_{ij} = \frac{x_{ij}}{\max_i(x_{ij})}$$
+    *   Perkalian Matriks Terbobot:
+        $$V_i = \sum_{j=1}^{n} w_j \cdot r_{ij}$$
+    *   Perangkingan nilai preferensi $V_i$ secara *descending* untuk menentukan 3 divisi peringkat teratas (*Top 3*).
 
 ---
 
-## 5. Struktur Database (Skema Tabel)
-Sistem menggunakan MySQL dengan struktur tabel inti sebagai berikut:
-1.  `users`: id, name, email, password, role (applicant, hrd, superadmin).
-2.  `applicant_profiles`: id, user_id, type (mahasiswa/umum), institution, phone, cv_path.
-3.  `divisions`: id, name, description. *(Berisi 14 row data).*
-4.  `criteria`: id, code (C1-C7), name, type (benefit).
-5.  `questions`: id, criteria_id, question_text. *(Berisi 18 row data).*
-6.  `matrix_weights`: id, division_id, criteria_id, weight_percentage. *(Berisi 14 x 7 = 98 row data bobot).*
-7.  `applicant_answers`: id, user_id, question_id, score_value.
-8.  `saw_results`: id, user_id, division_id, final_score, rank.
-9.  `applications`: id, user_id, selected_division_id, approved_division_id, status (pending, approved, rejected, reassigned), hrd_notes.
+## 5. Struktur Database & Model Data
+
+Aplikasi menggunakan database **TiDB Cloud (Serverless MySQL)** dengan koneksi TLS/SSL:
+1.  `users`: id, name, email, password, role (`applicant`, `hrd`, `superadmin`), remember_token, timestamps.
+2.  `applicant_profiles`: id, user_id, type (`mahasiswa`, `umum`), institution, phone, cv_path, timestamps. Dilengkapi accessor `cv_url` untuk tautan HTTPS Cloudinary.
+3.  `divisions`: id, name, description, timestamps. *(14 baris data)*
+4.  `criteria`: id, code ($C_1 - C_7$), name, type (`benefit`), timestamps.
+5.  `questions`: id, criteria_id, question_text, timestamps. *(18 baris data instrumen)*
+6.  `matrix_weights`: id, division_id, criteria_id, weight_percentage, timestamps. *(98 baris data bobot)*
+7.  `applicant_answers`: id, user_id, question_id, score_value, timestamps.
+8.  `saw_results`: id, user_id, division_id, final_score, rank, timestamps.
+9.  `applications`: id, user_id, selected_division_id, approved_division_id, status (`pending`, `approved`, `rejected`, `reassigned`), hrd_notes, timestamps.
 
 ---
 
-## 6. Arsitektur Folder (Laravel 12 & Livewire)
-```text
-spk-vinix-magang/
-├── app/
-│   ├── Http/Controllers/
-│   │   ├── AuthController.php          # Logika Login/Registrasi
-│   │   ├── HrdController.php           # Logika Dashboard HRD
-│   │   └── SuperAdminController.php    # Logika Kelola Master Data & Bobot
-│   ├── Livewire/
-│   │   └── Applicant/
-│   │       ├── QuestionnaireForm.php   # Logika Form Kuesioner Multi-step
-│   │       └── SawResultBoard.php      # Logika Tampilan & Pilih Top 3
-│   ├── Services/
-│   │   └── SawCalculationService.php   # "Otak" perhitungan Matematika SAW
-├── database/
-│   ├── migrations/                     # File skema database (poin 5)
-│   └── seeders/                        # File Seeder (Role, 14 Divisi, 7 Kriteria, Bobot)
-├── resources/
-│   ├── css/app.css                     # Konfigurasi Tailwind (Warna Vinix)
-│   ├── views/
-│   │   ├── layouts/
-│   │   │   ├── app.blade.php           # Base Layout (Warna latar slate-50)
-│   │   │   └── navigation.blade.php    # Navbar & Sidebar (Warna Navy Blue)
-│   │   ├── livewire/applicant/         # View untuk Multi-step form
-│   │   ├── dashboard/                  # View Dashboard HRD & Super Admin
+## 6. Infrastruktur & Cloud Architecture
+
 ```
+                  ┌───────────────────────────────┐
+                  │        Pengguna / Web         │
+                  └───────────────┬───────────────┘
+                                  │ HTTPS
+                                  ▼
+      ┌────────────────────────────────────────────────────────┐
+      │                   Aplikasi Laravel 12                  │
+      │        (Vercel Serverless / Docker Container)          │
+      └──────────────┬─────────────────────────┬───────────────┘
+                     │ TLS/SSL (Port 4000)     │ HTTPS REST API
+                     ▼                         ▼
+         ┌───────────────────────┐ ┌───────────────────────┐
+         │      TiDB Cloud       │ │       Cloudinary      │
+         │  (Serverless MySQL)   │ │ (Media & Document CV) │
+         └───────────────────────┘ └───────────────────────┘
+```
+
+1.  **Database Layer:** **TiDB Cloud (Serverless MySQL)** pada AWS Region `ap-southeast-1` (Singapore) dengan verifikasi sertifikat SSL CA (`storage/tidb-ca.pem`).
+2.  **Storage Layer:** **Cloudinary Cloud Storage** dengan penataan folder terisolasi (`spk-magang-vinix7/cvs`) untuk menjaga pemisahan berkas antar proyek.
+3.  **Deployment Layer:**
+    *   **Vercel:** Menggunakan serverless PHP runtime (`vercel-php`) dengan konfigurasi `vercel.json` dan routing `/tmp`.
+    *   **Docker:** Menggunakan `Dockerfile` multi-stage berbasis Nginx + PHP-FPM untuk platform container (Render / Railway / VPS).
+
+---
+
+## 7. Penjaminan Kualitas (Quality Assurance)
+
+Sistem telah diuji secara otomatis melalui **PHPUnit Test Suite**:
+*   **Total Pengujian:** 35 Tests
+*   **Total Assertions:** 95 Assertions
+*   **Status:** **100% Passed**
+*   **Cakupan Uji:** Autentikasi, otorisasi peran (RBAC), integritas kalkulasi algoritma SAW, penanganan berkas Cloudinary, dan stabilitas seeding master data.

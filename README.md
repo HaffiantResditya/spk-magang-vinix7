@@ -4,14 +4,34 @@ Sistem Pendukung Keputusan (SPK) berbasis *web* yang berfungsi sebagai "Kompas K
 
 Antarmuka aplikasi ini didesain secara khusus mengikuti identitas visual (UI/UX) *enterprise* dari website resmi [vinix7.id](https://vinix7.id/), mengusung perpaduan warna *Navy Blue* (Profesionalisme IT) dan *Aurum Gold* (Inovasi & Indonesia Emas).
 
-## 🚀 Fitur Utama
-*   **Mandatory Authentication:** Sistem portal mandiri dengan registrasi dan login wajib bagi pelamar untuk melacak status lamaran (Diterima/Ditolak).
-*   **Interactive Multi-step Form (Livewire):** 18 instrumen pertanyaan *self-assessment* dengan UI/UX transisi yang halus tanpa memuat ulang halaman (*no-reload*).
-*   **Real-time SAW Engine:** Perhitungan matriks algoritma SAW yang memproses input pelamar melawan bobot dari 14 divisi secara instan, menghasilkan Top 3 Rekomendasi.
-*   **HRD Analytical Dashboard:** Panel manajemen komprehensif bagi HRD untuk meninjau skor mentah pelamar, persentase algoritma, dan melakukan eksekusi final keputusan rekrutmen.
-*   **Dynamic Matrix Weights:** Kemampuan eksklusif Super Admin untuk menambah, mengubah, atau menghapus persentase matriks bobot divisi tanpa perlu mengubah kode sumber aplikasi (*hardcode*).
+---
 
-## 👥 14 Pilihan Divisi (Open Roles Batch 5)
+## 🚀 Fitur Utama
+
+*   **Mandatory Authentication & Keamanan Akun:**
+    *   Portal mandiri dengan registrasi dan login wajib bagi pelamar untuk melacak status lamaran.
+    *   Fitur *Password Visibility Toggle* (Tampilkan / Sembunyikan Kata Sandi) dengan ikon responsif.
+    *   Modal notifikasi interaktif **SweetAlert2** untuk kegagalan autentikasi (*Autentikasi Gagal*) dan konfirmasi logout.
+*   **Interactive Multi-step Assessment (Livewire):**
+    *   18 instrumen pertanyaan *self-assessment* (mewakili kriteria C1–C7) dengan transisi mulus tanpa memuat ulang halaman (*no-reload*).
+    *   Formulir dinamis yang menyesuaikan petunjuk pengisian bagi pelamar kategori **Mahasiswa** maupun **Umum**.
+*   **Real-time SAW Engine:**
+    *   Perhitungan matriks algoritma SAW memproses input kuesioner pelamar terhadap 98 bobot divisi secara instan.
+    *   Menampilkan **Top 3 Rekomendasi Divisi** dengan persentase kecocokan tertinggi berbalut aksen emas (*Aurum*).
+*   **Cloud Document Management (Cloudinary):**
+    *   Pengunggahan berkas CV (PDF) terintegrasi langsung dengan **Cloudinary Cloud Storage** pada folder terisolasi (`spk-magang-vinix7/cvs`).
+    *   Akses dokumen CV dapat dibuka langsung melalui tautan aman HTTPS dari dashboard pelamar maupun HRD.
+*   **HRD Analytical Dashboard:**
+    *   Panel manajemen komprehensif bagi HRD untuk melihat rekapitulasi pelamar, skor mentah asesmen, dan persentase SAW.
+    *   Sistem eksekusi keputusan rekrutmen (*Terima*, *Alihkan ke Rekomendasi 2/3*, atau *Tolak*) dengan konfirmasi SweetAlert2.
+*   **Super Admin Dynamic Matrix Weights:**
+    *   Manajemen master data 14 Divisi, 7 Kriteria Inti, dan 18 Pertanyaan Kuesioner.
+    *   Kemampuan mengubah atau menghapus bobot matriks (*14 x 7 = 98 bobot*) secara fleksibel tanpa mengubah kode sumber.
+
+---
+
+## 👥 14 Pilihan Divisi Magang
+
 1. Human Resource (SDM) Analyst
 2. Python Data Science Engineer
 3. Data Analyst
@@ -27,22 +47,32 @@ Antarmuka aplikasi ini didesain secara khusus mengikuti identitas visual (UI/UX)
 13. Business Administration Intelligence Analyst (Power BI & Excel)
 14. Cybercrime & Forensic Investigator
 
-## 🛠️ Tech Stack
-*   **Backend Framework:** Laravel 12 (PHP 8.2+)
-*   **Dynamic Component:** Livewire 3
-*   **Frontend Framework:** Tailwind CSS 3 (Kustomisasi Tema Vinix7)
-*   **Database:** MySQL
-*   **Authentication:** Laravel Breeze
+---
 
-## 🎨 Panduan Tema (Tailwind Config)
-Sistem ini menggunakan palet warna khusus:
+## 🛠️ Arsitektur & Tech Stack
+
+*   **Backend Framework:** Laravel 12 (PHP 8.2+)
+*   **Dynamic Component:** Livewire
+*   **Frontend Framework:** Tailwind CSS 3 (Kustomisasi Enterprise Vinix7) & Vite
+*   **Interactive Alerts:** SweetAlert2
+*   **Database:** **TiDB Cloud (Serverless MySQL)** terenkripsi TLS/SSL
+*   **Cloud Storage:** **Cloudinary** (Media & Document Storage)
+*   **Deployment Ready:** 
+    *   **Vercel Serverless:** Dikonfigurasi dengan `vercel.json` dan `api/index.php`.
+    *   **Docker Container:** Dikonfigurasi dengan `Dockerfile` berbasis Nginx + PHP-FPM untuk platform container (Render / Railway / VPS).
+
+---
+
+## 🎨 Panduan Tema (Tailwind Colors)
+
+Sistem ini menggunakan palet warna khusus sesuai identitas resmi:
 ```javascript
 theme: {
     extend: {
         colors: {
-            'vinix-navy': '#1e3a8a', // blue-900
-            'vinix-aurum': '#eab308', // yellow-500
-            'vinix-bg': '#f8fafc',    // slate-50
+            'vinix-navy': '#1e3a8a',  // Kepercayaan & Profesionalisme IT
+            'vinix-aurum': '#eab308', // Emas Inovasi & Rekomendasi Unggulan
+            'vinix-bg': '#f8fafc',    // Latar Bersih Slate 50
         },
         fontFamily: {
             sans: ['Inter', 'sans-serif'],
@@ -51,29 +81,61 @@ theme: {
 }
 ```
 
-## ⚙️ Panduan Instalasi (Development)
+---
 
-1. Clone repositori aplikasi: 
-   `git clone https://github.com/HaffiantResditya/spk-magang-vinix7.git`
-2. Masuk ke direktori root: 
-   `cd spk-magang-vinix7`
-3. Install dependensi *backend*: 
-   `composer install`
-4. Install dependensi *frontend*: 
-   `npm install && npm run build`
-5. Salin dan sesuaikan konfigurasi *environment*: 
-   `cp .env.example .env`
-6. Generate App Key Laravel: 
-   `php artisan key:generate`
-7. Buat database baru di MySQL dan sesuaikan kredensial di file `.env`.
-8. **PENTING:** Jalankan migrasi dan seeder untuk menyuntikkan data 14 Divisi, 7 Kriteria, dan Matrix Bobot.
-   `php artisan migrate --seed`
-9. Jalankan server lokal: 
-   `php artisan serve`
+## ⚙️ Panduan Instalasi Lokal (Development)
 
-## 👥 Hak Akses (Role Seeder Default)
-Setelah menjalankan langkah instalasi nomor 8, Anda dapat login menggunakan kredensial bawaan (Gmail):
-*   **Super Admin:** `superadmin.vinix7@gmail.com` | Password: `password`
-*   **Admin HRD:** `hrd.vinix7@gmail.com` | Password: `password`
-*   **Pelamar Test:** `pelamar.vinix7@gmail.com` | Password: `password`
-*(Atau gunakan fitur Registrasi pada halaman depan aplikasi).*
+1. Clone repositori:
+   ```bash
+   git clone https://github.com/HaffiantResditya/spk-magang-vinix7.git
+   cd spk-magang-vinix7
+   ```
+2. Pasang dependensi PHP & Node:
+   ```bash
+   composer install
+   npm install && npm run build
+   ```
+3. Salin dan sesuaikan konfigurasi environment:
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+4. Konfigurasikan kredensial database (TiDB Cloud atau MySQL lokal) dan Cloudinary pada file `.env`.
+5. Jalankan migrasi dan seeder awal:
+   ```bash
+   php artisan migrate --seed
+   ```
+6. Jalankan dev server lokal:
+   ```bash
+   php artisan serve
+   npm run dev
+   ```
+
+---
+
+## 👥 Akun Bawaan (Default Seeder)
+
+Setelah menjalankan `php artisan migrate --seed`, Anda dapat login menggunakan kredensial berikut:
+
+| Peran (Role) | Alamat Email | Kata Sandi |
+| :--- | :--- | :--- |
+| **Super Admin** | `superadmin.vinix7@gmail.com` | `password` |
+| **Admin HRD** | `hrd.vinix7@gmail.com` | `password` |
+| **Pelamar Demo** | `pelamar.vinix7@gmail.com` | `password` |
+
+*(Pelamar baru juga dapat mendaftarkan akun mandiri melalui menu Registrasi).*
+
+---
+
+## 🧪 Pengujian Otomatis (Automated Tests)
+
+Aplikasi dilengkapi dengan rangkaian pengujian unit dan fitur komprehensif (**35 Tests, 95 Assertions**):
+```bash
+php artisan test
+```
+Pengujian mencakup:
+*   Autentikasi & Validasi Kata Sandi
+*   Role-Based Access Control (RBAC)
+*   Kalkulasi Algoritma SAW & Penentuan Top 3
+*   Penyimpanan Dokumen Cloudinary & URL Accessor
+*   Integritas Data Master Divisi, Kriteria, dan Bobot
