@@ -22,8 +22,9 @@ Untuk mengatasi kendala ini, dibangun Sistem Pendukung Keputusan (SPK) berbasis 
 ## 2. Pedoman Desain & UI/UX (Identitas vinix7.id)
 
 Antarmuka aplikasi mengadopsi standar identitas visual *enterprise* dari situs resmi perusahaan [vinix7.id](https://vinix7.id/):
-*   **Warna Utama (*Primary - Navy*):** **`#1e3a8a`** (`blue-900` / `blue-800`). Mewakili kepercayaan (*trust*), kestabilan, dan profesionalisme teknologi informasi. Digunakan pada navbar, sidebar, header, dan tombol utama.
+*   **Warna Utama (*Primary - Navy*):** **`#1e3a8a`** (`blue-900` / `blue-800`). Mewakili kepercayaan (*trust*), kestabilan, dan profesionalisme teknologi informasi. Digunakan pada sidebar, card header, lencana divisi, dan tombol utama (*action button*).
 *   **Warna Aksen (*Secondary - Aurum*):** **`#eab308`** (`yellow-500` / `amber-500`). Merujuk pada nama "Aurum" dan visi "Indonesia Emas". Digunakan khusus untuk menonjolkan Top 3 Rekomendasi SAW, badge status, dan elemen *Call to Action* (CTA).
+*   **Navigasi & Header (*Executive Clean White*):** Mengusung latar belakang putih eksekutif (`bg-white/95 backdrop-blur border-b border-slate-200/90 shadow-xs`) berpadu dengan logo resmi VINIX7 berwarna asli (Royal Blue `#003399` dan Aurum Yellow `#fbe156`) tanpa teks samping yang padat, menciptakan tampilan korporat yang modern, elegan, dan fokus. Logo disematkan dalam format *Base64 Data URI* dengan keandalan tinggi bebas risiko *broken asset* pada lingkungan *serverless* / Vercel.
 *   **Warna Latar (*Background*):** **`#f8fafc`** (`slate-50`). Memberikan kesan bersih, luas, dan nyaman di mata saat membaca instrumen kuesioner.
 *   **Tipografi:** Font Sans-Serif modern (**Inter**).
 *   **Mikro-Interaksi & Feedback:**
@@ -97,16 +98,125 @@ Antarmuka aplikasi mengadopsi standar identitas visual *enterprise* dari situs r
 
 ## 5. Struktur Database & Model Data
 
-Aplikasi menggunakan database **TiDB Cloud (Serverless MySQL)** dengan koneksi TLS/SSL:
-1.  `users`: id, name, email, password, role (`applicant`, `hrd`, `superadmin`), remember_token, timestamps.
-2.  `applicant_profiles`: id, user_id, type (`mahasiswa`, `umum`), institution, phone, cv_path, timestamps. Dilengkapi accessor `cv_url` untuk tautan HTTPS Cloudinary.
-3.  `divisions`: id, name, description, timestamps. *(14 baris data)*
-4.  `criteria`: id, code ($C_1 - C_7$), name, type (`benefit`), timestamps.
-5.  `questions`: id, criteria_id, question_text, timestamps. *(18 baris data instrumen)*
-6.  `matrix_weights`: id, division_id, criteria_id, weight_percentage, timestamps. *(98 baris data bobot)*
-7.  `applicant_answers`: id, user_id, question_id, score_value, timestamps.
-8.  `saw_results`: id, user_id, division_id, final_score, rank, timestamps.
-9.  `applications`: id, user_id, selected_division_id, approved_division_id, status (`pending`, `approved`, `rejected`, `reassigned`), hrd_notes, timestamps.
+Aplikasi menggunakan arsitektur basis data relasional **TiDB Cloud (Serverless MySQL)** dengan koneksi TLS/SSL (`storage/tidb-ca.pem`) pada port 4000. 
+
+### 5.1 Diagram Relasi Entitas (Entity Relationship Diagram - ERD)
+
+```mermaid
+erDiagram
+    users ||--o| applicant_profiles : "1 to 1 (user_id)"
+    users ||--o{ applicant_answers : "1 to many (user_id)"
+    users ||--o{ saw_results : "1 to many (user_id)"
+    users ||--o{ applications : "1 to many (user_id)"
+    
+    divisions ||--o{ matrix_weights : "1 to many (division_id)"
+    divisions ||--o{ saw_results : "1 to many (division_id)"
+    divisions ||--o{ applications : "1 to many (selected_division_id)"
+    divisions ||--o{ applications : "1 to many (approved_division_id)"
+    
+    criteria ||--o{ questions : "1 to many (criteria_id)"
+    criteria ||--o{ matrix_weights : "1 to many (criteria_id)"
+    
+    questions ||--o{ applicant_answers : "1 to many (question_id)"
+
+    users {
+        bigint id PK
+        string name
+        string email UK
+        string password
+        enum role "applicant | hrd | superadmin"
+        string remember_token
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    applicant_profiles {
+        bigint id PK
+        bigint user_id FK
+        enum type "mahasiswa | umum"
+        string institution
+        string phone
+        string cv_path
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    divisions {
+        bigint id PK
+        string name
+        text description
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    criteria {
+        bigint id PK
+        string code "C1 - C7"
+        string name
+        enum type "benefit"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    questions {
+        bigint id PK
+        bigint criteria_id FK
+        text question_text
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    matrix_weights {
+        bigint id PK
+        bigint division_id FK
+        bigint criteria_id FK
+        decimal weight_percentage
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    applicant_answers {
+        bigint id PK
+        bigint user_id FK
+        bigint question_id FK
+        integer score_value
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    saw_results {
+        bigint id PK
+        bigint user_id FK
+        bigint division_id FK
+        decimal final_score
+        integer rank
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    applications {
+        bigint id PK
+        bigint user_id FK
+        bigint selected_division_id FK
+        bigint approved_division_id FK
+        enum status "pending | approved | rejected | reassigned"
+        text hrd_notes
+        timestamp created_at
+        timestamp updated_at
+    }
+```
+
+### 5.2 Rincian 9 Entitas Utama
+
+1.  **`users`**: Entitas autentikasi utama. Menyimpan data kredensial dan peran RBAC (`applicant`, `hrd`, `superadmin`).
+2.  **`applicant_profiles`**: Profil demografi pelamar berelasi 1:1 dengan `users`. Menyimpan kategori (`mahasiswa` / `umum`), instansi/kampus, nomor WhatsApp, dan *path* berkas CV. Dilengkapi accessor `cv_url` untuk tautan HTTPS Cloudinary.
+3.  **`divisions`**: Entitas master 14 divisi magang spesifik PT Vinix Seven Aurum sebagai himpunan alternatif ($A_1 - A_{14}$).
+4.  **`criteria`**: Entitas 7 kriteria asesmen inti ($C_1 - C_7$) berkarakter *Benefit*.
+5.  **`questions`**: Entitas 18 instrumen kuesioner asesmen mandiri pelamar yang terhubung langsung ke kriteria induknya.
+6.  **`matrix_weights`**: Matriks preferensi pembobotan ($W$) yang menghubungkan 14 Divisi x 7 Kriteria (98 pasangan bobot) yang dapat dikonfigurasi dinamis oleh Super Admin.
+7.  **`applicant_answers`**: Lembar rekaman jawaban mentah skala Likert/numerik (20–100) per butir pertanyaan kuesioner dari pelamar.
+8.  **`saw_results`**: Hasil kalkulasi mesin SAW berupa skor preferensi akhir ($V_i$) dan peringkat (*rank*) per divisi untuk tiap pelamar.
+9.  **`applications`**: Berkas pengajuan lamaran final pelamar yang memuat divisi pilihan, status persetujuan HRD (`pending`, `approved`, `rejected`, `reassigned`), divisi final yang disetujui, serta catatan evaluasi HRD.
 
 ---
 

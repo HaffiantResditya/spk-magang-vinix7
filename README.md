@@ -2,7 +2,7 @@
 
 Sistem Pendukung Keputusan (SPK) berbasis *web* yang berfungsi sebagai "Kompas Karir" bagi pelamar magang di PT Vinix Seven Aurum. Sistem ini memetakan kompetensi pelamar ke dalam 14 divisi spesifik menggunakan algoritma **Simple Additive Weighting (SAW)**.
 
-Antarmuka aplikasi ini didesain secara khusus mengikuti identitas visual (UI/UX) *enterprise* dari website resmi [vinix7.id](https://vinix7.id/), mengusung perpaduan warna *Navy Blue* (Profesionalisme IT) dan *Aurum Gold* (Inovasi & Indonesia Emas).
+Antarmuka aplikasi ini didesain secara khusus mengikuti identitas visual (UI/UX) *enterprise* dari website resmi [vinix7.id](https://vinix7.id/), mengusung *Executive Clean White Navbar* dengan logo resmi VINIX7 (*Royal Blue* & *Aurum Gold*) yang disematkan secara tangguh menggunakan *Base64 Data URI* untuk keandalan maksimal tanpa risiko aset gambar rusak (*broken image*).
 
 ---
 
@@ -60,6 +60,130 @@ Antarmuka aplikasi ini didesain secara khusus mengikuti identitas visual (UI/UX)
 *   **Deployment Ready:** 
     *   **Vercel Serverless:** Dikonfigurasi dengan `vercel.json` dan `api/index.php`.
     *   **Docker Container:** Dikonfigurasi dengan `Dockerfile` berbasis Nginx + PHP-FPM untuk platform container (Render / Railway / VPS).
+
+---
+
+## 🗄️ Relasi Database & ERD (Entity Relationship Diagram)
+
+Basis data menggunakan arsitektur relasional **TiDB Cloud (Serverless MySQL)** yang terdiri dari 9 entitas utama:
+
+```mermaid
+erDiagram
+    users ||--o| applicant_profiles : "1 to 1 (user_id)"
+    users ||--o{ applicant_answers : "1 to many (user_id)"
+    users ||--o{ saw_results : "1 to many (user_id)"
+    users ||--o{ applications : "1 to many (user_id)"
+    
+    divisions ||--o{ matrix_weights : "1 to many (division_id)"
+    divisions ||--o{ saw_results : "1 to many (division_id)"
+    divisions ||--o{ applications : "1 to many (selected_division_id)"
+    divisions ||--o{ applications : "1 to many (approved_division_id)"
+    
+    criteria ||--o{ questions : "1 to many (criteria_id)"
+    criteria ||--o{ matrix_weights : "1 to many (criteria_id)"
+    
+    questions ||--o{ applicant_answers : "1 to many (question_id)"
+
+    users {
+        bigint id PK
+        string name
+        string email UK
+        string password
+        enum role "applicant | hrd | superadmin"
+    }
+
+    applicant_profiles {
+        bigint id PK
+        bigint user_id FK
+        enum type "mahasiswa | umum"
+        string institution
+        string phone
+        string cv_path
+    }
+
+    divisions {
+        bigint id PK
+        string name
+        text description
+    }
+
+    criteria {
+        bigint id PK
+        string code "C1 - C7"
+        string name
+        enum type "benefit"
+    }
+
+    questions {
+        bigint id PK
+        bigint criteria_id FK
+        text question_text
+    }
+
+    matrix_weights {
+        bigint id PK
+        bigint division_id FK
+        bigint criteria_id FK
+        decimal weight_percentage
+    }
+
+    applicant_answers {
+        bigint id PK
+        bigint user_id FK
+        bigint question_id FK
+        integer score_value
+    }
+
+    saw_results {
+        bigint id PK
+        bigint user_id FK
+        bigint division_id FK
+        decimal final_score
+        integer rank
+    }
+
+    applications {
+        bigint id PK
+        bigint user_id FK
+        bigint selected_division_id FK
+        bigint approved_division_id FK
+        enum status "pending | approved | rejected | reassigned"
+        text hrd_notes
+    }
+```
+
+### Ringkasan Entitas & Relasi Data:
+1. **`users`**: Tabel otentikasi akun & peran pengguna (`applicant`, `hrd`, `superadmin`).
+2. **`applicant_profiles`**: Profil biodata pelamar (*One-to-One* ke `users`) dan tautan dokumen CV Cloudinary.
+3. **`divisions`**: Master 14 divisi magang (Himpunan Alternatif SAW $A_1 - A_{14}$).
+4. **`criteria`**: Master 7 kriteria asesmen inti kompetensi ($C_1 - C_7$).
+5. **`questions`**: 18 butir instrumen kuesioner asesmen mandiri pelamar.
+6. **`matrix_weights`**: Matriks 98 bobot relasi (14 Divisi × 7 Kriteria) untuk kalkulasi SAW.
+7. **`applicant_answers`**: Rekaman skor jawaban kuesioner pelamar (skala 20–100).
+8. **`saw_results`**: Hasil kalkulasi skor preferensi $V_i$ dan perangkingan 14 divisi per pelamar.
+9. **`applications`**: Berkas pengajuan lamaran resmi pelamar dan riwayat persetujuan HRD.
+
+---
+
+## 🔌 Panduan Koneksi Database GUI (DBeaver / TablePlus / Navicat)
+
+Untuk mengelola atau menginspeksi basis data TiDB Cloud menggunakan GUI DBeaver:
+
+1. **Driver:** Pilih **MySQL** (atau **MariaDB**).
+2. **Main Settings:**
+   * **Host:** Host cluster TiDB Cloud Anda (port default: `4000`)
+   * **Port:** `4000`
+   * **Database:** `spk_magang_vinix7`
+   * **Username:** Sesuai kredensial `.env`
+   * **Password:** Sesuai kredensial `.env`
+3. **SSL Settings:**
+   * Centang opsi **Use SSL**
+   * **SSL Mode:** `VERIFY_CA` (atau centang *Trust server certificate*)
+   * **CA Certificate:** Arahkan ke file sertifikat CA: `storage/tidb-ca.pem`
+4. **Tips Diagram ERD Bersih di DBeaver:**
+   * Klik kanan pada database > pilih **View Diagram**.
+   * Bersihkan tabel sistem bawaan TiDB dengan `Ctrl + A` lalu `Delete` (hanya menghapus dari canvas, bukan dari database).
+   * Tarik (*drag-and-drop*) 9 tabel inti SPK dari navigator untuk memperoleh ERD yang rapi.
 
 ---
 
