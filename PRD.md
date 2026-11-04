@@ -54,6 +54,7 @@ Antarmuka aplikasi mengadopsi standar identitas visual *enterprise* dari situs r
 ### 3.3 Aktor: Super Admin
 1.  **Manajemen Master Data:** Mengelola 14 Data Divisi, 7 Kriteria Inti, dan 18 Pertanyaan Kuesioner.
 2.  **Manajemen Bobot (W):** Mengatur persentase matriks pembobotan algoritma SAW (14 divisi x 7 kriteria = 98 relasi bobot) secara dinamis tanpa perlu mengubah kode sumber aplikasi.
+3.  **Validasi Akumulasi Bobot 100%:** Memiliki sistem validasi ketat di sisi backend (`DB::transaction`) dan visual frontend; setiap divisi wajib memiliki total akumulasi bobot $\sum W_{ij} = 100\%$. Penyimpanan otomatis dibatalkan disertai peringatan SweetAlert2 jika ditemukan divisi yang tidak memenuhi syarat 100%.
 
 ---
 
@@ -242,9 +243,10 @@ erDiagram
 
 1.  **Database Layer:** **TiDB Cloud (Serverless MySQL)** pada AWS Region `ap-southeast-1` (Singapore) dengan verifikasi sertifikat SSL CA (`storage/tidb-ca.pem`).
 2.  **Storage Layer:** **Cloudinary Cloud Storage** dengan penataan folder terisolasi (`spk-magang-vinix7/cvs`) untuk menjaga pemisahan berkas antar proyek.
-3.  **Deployment Layer:**
-    *   **Vercel:** Menggunakan serverless PHP runtime (`vercel-php`) dengan konfigurasi `vercel.json` dan routing `/tmp`.
-    *   **Docker:** Menggunakan `Dockerfile` multi-stage berbasis Nginx + PHP-FPM untuk platform container (Render / Railway / VPS).
+3.  **Deployment & Runtime Layer:**
+    *   **Vercel Serverless:** Menggunakan runtime `vercel-php@0.7.4` yang dikunci secara permanen pada Region **Singapura (`sin1`)** di `vercel.json`. Penempatan ini mewujudkan *network co-location* berlatensi sangat rendah (< 10 ms) ke TiDB Cloud di AWS Region `ap-southeast-1` Singapura, serta routing `/tmp` untuk direktori cache/views/sessions.
+    *   **Timezone & Locale:** Dikonfigurasi dinamis via `APP_TIMEZONE=Asia/Jakarta` (WIB) pada `config/app.php` untuk akurasi pencatatan waktu transaksi lamaran dan riwayat evaluasi HRD.
+    *   **Docker Container:** Menggunakan `Dockerfile` multi-stage berbasis Nginx + PHP-FPM untuk opsi *deployment* pada platform berbasis kontainer (Render / Railway / VPS).
 
 ---
 

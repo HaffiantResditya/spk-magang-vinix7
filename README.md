@@ -24,9 +24,10 @@ Antarmuka aplikasi ini didesain secara khusus mengikuti identitas visual (UI/UX)
 *   **HRD Analytical Dashboard:**
     *   Panel manajemen komprehensif bagi HRD untuk melihat rekapitulasi pelamar, skor mentah asesmen, dan persentase SAW.
     *   Sistem eksekusi keputusan rekrutmen (*Terima*, *Alihkan ke Rekomendasi 2/3*, atau *Tolak*) dengan konfirmasi SweetAlert2.
-*   **Super Admin Dynamic Matrix Weights:**
+*   **Super Admin Dynamic Matrix Weights & Strict Validation:**
     *   Manajemen master data 14 Divisi, 7 Kriteria Inti, dan 18 Pertanyaan Kuesioner.
     *   Kemampuan mengubah atau menghapus bobot matriks (*14 x 7 = 98 bobot*) secara fleksibel tanpa mengubah kode sumber.
+    *   **Validasi Akumulasi 100%:** Setiap divisi wajib memiliki total akumulasi bobot $\sum W_{ij} = 100\%$. Transaksi penyimpanan dilindungi `DB::transaction` dan otomatis dibatalkan jika total bobot tidak tepat 100%, disertai peringatan SweetAlert2.
 
 ---
 
@@ -51,14 +52,15 @@ Antarmuka aplikasi ini didesain secara khusus mengikuti identitas visual (UI/UX)
 
 ## 🛠️ Arsitektur & Tech Stack
 
-*   **Backend Framework:** Laravel 12 (PHP 8.2+)
+*   **Backend Framework:** Laravel 12 (PHP 8.2 / 8.4 ready)
+*   **Zona Waktu & Lokalisasi:** Asia/Jakarta (WIB) via `APP_TIMEZONE`
 *   **Dynamic Component:** Livewire
 *   **Frontend Framework:** Tailwind CSS 3 (Kustomisasi Enterprise Vinix7) & Vite
 *   **Interactive Alerts:** SweetAlert2
-*   **Database:** **TiDB Cloud (Serverless MySQL)** terenkripsi TLS/SSL
+*   **Database:** **TiDB Cloud (Serverless MySQL)** AWS Region `ap-southeast-1` (Singapura) terenkripsi TLS/SSL
 *   **Cloud Storage:** **Cloudinary** (Media & Document Storage)
 *   **Deployment Ready:** 
-    *   **Vercel Serverless:** Dikonfigurasi dengan `vercel.json` dan `api/index.php`.
+    *   **Vercel Serverless:** Runtime `vercel-php@0.7.4` terkunci permanen pada Region **Singapura (`sin1`)** di `vercel.json` untuk *co-location* latensi rendah (< 10 ms) langsung ke TiDB Cloud.
     *   **Docker Container:** Dikonfigurasi dengan `Dockerfile` berbasis Nginx + PHP-FPM untuk platform container (Render / Railway / VPS).
 
 ---
