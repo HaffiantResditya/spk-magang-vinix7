@@ -164,19 +164,42 @@ class SuperAdminController extends Controller
     {
         $weights = $request->input('weights', []); // format: [division_id => [criteria_id => weight_percentage]]
 
+        // Validasi sesuai Activity Diagram: Hitung total bobot per divisi (∑ W_ij). Setiap divisi wajib tepat 100%
+        $invalidDivisions = [];
         foreach ($weights as $divisionId => $criteriaWeights) {
+            $total = 0.0;
             foreach ($criteriaWeights as $criteriaId => $percentage) {
-                MatrixWeight::updateOrCreate(
-                    [
-                        'division_id' => $divisionId,
-                        'criteria_id' => $criteriaId,
-                    ],
-                    [
-                        'weight_percentage' => floatval($percentage),
-                    ]
-                );
+                $total += floatval($percentage);
+            }
+            if (abs($total - 100.0) > 0.01) {
+                $div = Division::find($divisionId);
+                $name = $div ? $div->name : "Divisi #{$divisionId}";
+                $invalidDivisions[] = "{$name} (Total: {$total}%)";
             }
         }
+
+        if (!empty($invalidDivisions)) {
+            return back()->with(
+                'error',
+                'Penyimpanan dibatalkan: Total akumulasi bobot kriteria untuk setiap divisi wajib tepat 100%. Periksa divisi berikut: ' . implode(', ', $invalidDivisions)
+            );
+        }
+
+        \Illuminate\Support\Facades\DB::transaction(function () use ($weights) {
+            foreach ($weights as $divisionId => $criteriaWeights) {
+                foreach ($criteriaWeights as $criteriaId => $percentage) {
+                    MatrixWeight::updateOrCreate(
+                        [
+                            'division_id' => $divisionId,
+                            'criteria_id' => $criteriaId,
+                        ],
+                        [
+                            'weight_percentage' => floatval($percentage),
+                        ]
+                    );
+                }
+            }
+        });
 
         return back()->with('success', 'Matriks bobot kriteria divisi berhasil disimpan.');
     }
