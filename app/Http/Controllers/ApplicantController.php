@@ -120,24 +120,40 @@ class ApplicantController extends Controller
     {
         $user = Auth::user();
 
-        $request->validate([
+        $rules = [
             'selected_division_id' => 'required|exists:divisions,id',
-            'cv_file' => 'required|file|mimes:pdf|max:5120', // max 5MB PDF
-        ]);
+        ];
 
-        // Upload CV
-        try {
-            $cloudinary = app(\App\Services\CloudinaryService::class);
-            $path = $cloudinary->uploadCv($request->file('cv_file'), $user->id);
-        } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::warning('Cloudinary upload failed, falling back to local storage: ' . $e->getMessage());
-            $path = $request->file('cv_file')->store('cv_uploads', 'public');
+        // If user already has a cv_path, cv_file is optional, otherwise required
+        if (!$user->profile?->cv_path) {
+            $rules['cv_file'] = 'required|file|mimes:pdf|max:5120';
+        } else {
+            $rules['cv_file'] = 'nullable|file|mimes:pdf|max:5120';
         }
 
-        $user->profile()->updateOrCreate(
-            ['user_id' => $user->id],
-            ['cv_path' => $path]
-        );
+        $request->validate($rules, [
+            'selected_division_id.required' => 'Silakan pilih salah satu divisi rekomendasi.',
+            'selected_division_id.exists' => 'Divisi yang dipilih tidak valid.',
+            'cv_file.required' => 'Silakan unggah dokumen CV Anda dalam format PDF.',
+            'cv_file.mimes' => 'Format file CV harus berupa dokumen PDF.',
+            'cv_file.max' => 'Ukuran file CV maksimal adalah 5 MB.',
+        ]);
+
+        if ($request->hasFile('cv_file')) {
+            // Upload CV to Cloudinary with local storage fallback
+            try {
+                $cloudinary = app(\App\Services\CloudinaryService::class);
+                $path = $cloudinary->uploadCv($request->file('cv_file'), $user->id);
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('Cloudinary upload failed, falling back to local storage: ' . $e->getMessage());
+                $path = $request->file('cv_file')->store('cv_uploads', 'public');
+            }
+
+            $user->profile()->updateOrCreate(
+                ['user_id' => $user->id],
+                ['cv_path' => $path]
+            );
+        }
 
         Application::updateOrCreate(
             ['user_id' => $user->id],

@@ -103,19 +103,96 @@
             </div>
         @endif
 
-        <form wire:submit.prevent="submitFinalApplication"
-            @submit.prevent="window.confirmDialog({
-                title: 'Konfirmasi Pengiriman Lamaran',
-                text: 'Apakah Anda yakin ingin mengirimkan berkas lamaran untuk divisi ini? Dokumen CV dan skor preferensi SAW akan diserahkan ke tim HRD.',
-                icon: 'question',
-                confirmText: 'Ya, Kirim Lamaran',
-                confirmColor: '#0F172A'
-            }).then(result => {
-                if (result.isConfirmed) {
-                    $wire.submitFinalApplication();
+        <form method="POST"
+            action="{{ route('applicant.apply') }}"
+            enctype="multipart/form-data"
+            id="finalApplicationForm"
+            x-data="{
+                fileName: '',
+                fileSize: '',
+                isSubmitting: false,
+                handleFileSelect(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+                        if (!isPdf) {
+                            window.Swal.fire({
+                                icon: 'error',
+                                title: 'Format File Tidak Sesuai',
+                                text: 'Mohon unggah dokumen Curriculum Vitae (CV) dalam format PDF.',
+                                confirmButtonColor: '#0F172A',
+                                customClass: {
+                                    popup: 'rounded-3xl border border-slate-100 shadow-2xl font-sans',
+                                    title: 'text-xl font-bold text-slate-900',
+                                    confirmButton: 'px-6 py-2.5 rounded-xl font-bold text-sm bg-slate-900 text-white shadow-md'
+                                }
+                            });
+                            e.target.value = '';
+                            this.fileName = '';
+                            return;
+                        }
+                        if (file.size > 5 * 1024 * 1024) {
+                            window.Swal.fire({
+                                icon: 'error',
+                                title: 'Ukuran File Terlalu Besar',
+                                text: 'Ukuran dokumen CV maksimal adalah 5 MB.',
+                                confirmButtonColor: '#0F172A',
+                                customClass: {
+                                    popup: 'rounded-3xl border border-slate-100 shadow-2xl font-sans',
+                                    title: 'text-xl font-bold text-slate-900',
+                                    confirmButton: 'px-6 py-2.5 rounded-xl font-bold text-sm bg-slate-900 text-white shadow-md'
+                                }
+                            });
+                            e.target.value = '';
+                            this.fileName = '';
+                            return;
+                        }
+                        this.fileName = file.name;
+                        this.fileSize = (file.size / (1024 * 1024)).toFixed(2);
+                    } else {
+                        this.fileName = '';
+                    }
+                },
+                submitForm(e) {
+                    e.preventDefault();
+                    const form = e.target;
+                    const cvInput = form.querySelector('#cv_upload_input');
+                    const hasExistingCv = {{ $user->profile?->cv_path ? 'true' : 'false' }};
+                    
+                    if (!hasExistingCv && (!cvInput.files || cvInput.files.length === 0)) {
+                        window.Swal.fire({
+                            icon: 'warning',
+                            title: 'Dokumen CV Wajib Diunggah',
+                            text: 'Silakan pilih file Curriculum Vitae (CV) dalam format PDF terlebih dahulu.',
+                            confirmButtonColor: '#0F172A',
+                            customClass: {
+                                popup: 'rounded-3xl border border-slate-100 shadow-2xl font-sans',
+                                title: 'text-xl font-bold text-slate-900',
+                                confirmButton: 'px-6 py-2.5 rounded-xl font-bold text-sm bg-slate-900 text-white shadow-md'
+                            }
+                        });
+                        return;
+                    }
+
+                    window.confirmDialog({
+                        title: 'Konfirmasi Pengiriman Lamaran',
+                        text: 'Apakah Anda yakin ingin mengirimkan berkas lamaran untuk divisi ini? Dokumen CV dan skor preferensi SAW akan diserahkan ke tim HRD PT Vinix Seven Aurum.',
+                        icon: 'question',
+                        confirmText: 'Ya, Kirim Lamaran',
+                        confirmColor: '#0F172A'
+                    }).then(result => {
+                        if (result.isConfirmed) {
+                            this.isSubmitting = true;
+                            form.submit();
+                        }
+                    });
                 }
-            })"
+            }"
+            @submit="submitForm($event)"
             class="space-y-6">
+            @csrf
+            <input type="hidden" name="selected_division_id" value="{{ $selectedDivisionId }}">
+
             <!-- Selected Division Confirmation -->
             <div class="bg-blue-50/60 border border-blue-200/70 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
@@ -142,10 +219,12 @@
                 </label>
                 <div class="border-2 border-dashed border-slate-300 hover:border-vinix-navy/60 rounded-2xl p-6 text-center transition-all bg-slate-50/50">
                     <input type="file"
-                        wire:model="cvFile"
+                        name="cv_file"
                         id="cv_upload_input"
-                        accept="application/pdf"
-                        class="hidden">
+                        accept="application/pdf,.pdf"
+                        @change="handleFileSelect($event)"
+                        class="hidden"
+                        {{ !$user->profile?->cv_path ? 'required' : '' }}>
 
                     <label for="cv_upload_input" class="cursor-pointer block">
                         <div class="mx-auto w-12 h-12 rounded-2xl bg-blue-100/70 text-vinix-navy flex items-center justify-center mb-3">
@@ -160,28 +239,37 @@
                         <p class="text-xs text-slate-400 mt-1">Format PDF, ukuran maksimal 5 MB</p>
                     </label>
 
-                    @if($cvFile)
-                        <div class="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl inline-flex items-center text-xs text-emerald-800 font-semibold">
-                            <svg class="w-4 h-4 mr-2 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                    <!-- Realtime Selected File Badge -->
+                    <template x-if="fileName">
+                        <div class="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl inline-flex items-center text-xs text-emerald-800 font-semibold shadow-xs">
+                            <svg class="w-4 h-4 mr-2 text-emerald-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                             </svg>
-                            File terpilih: {{ $cvFile->getClientOriginalName() }}
+                            <span>File siap dikirim: <strong x-text="fileName"></strong> (<span x-text="fileSize"></span> MB)</span>
                         </div>
-                    @elseif($user->profile?->cv_path)
-                        <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-xl inline-flex items-center text-xs text-blue-800 font-semibold">
-                            <svg class="w-4 h-4 mr-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd" />
-                            </svg>
-                            CV sebelumnya telah diunggah. Unggah kembali jika ingin memperbarui.
+                    </template>
+
+                    <!-- Fallback: Already Uploaded CV Badge -->
+                    <template x-if="!fileName">
+                        <div>
+                            @if($user->profile?->cv_path)
+                                <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-xl inline-flex items-center text-xs text-blue-800 font-semibold shadow-xs">
+                                    <svg class="w-4 h-4 mr-2 text-blue-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd" />
+                                    </svg>
+                                    CV sebelumnya telah tersimpan. Unggah file baru jika ingin mengganti.
+                                </div>
+                            @endif
                         </div>
-                    @endif
+                    </template>
                 </div>
-                @error('cvFile')
-                    <span class="text-xs text-red-600 font-medium block mt-1">{{ $message }}</span>
-                @enderror
-                @error('selectedDivisionId')
-                    <span class="text-xs text-red-600 font-medium block mt-1">{{ $message }}</span>
-                @enderror
+
+                @if($errors->has('cv_file'))
+                    <span class="text-xs text-red-600 font-medium block mt-1">{{ $errors->first('cv_file') }}</span>
+                @endif
+                @if($errors->has('selected_division_id'))
+                    <span class="text-xs text-red-600 font-medium block mt-1">{{ $errors->first('selected_division_id') }}</span>
+                @endif
             </div>
 
             <!-- Submit Button -->
@@ -194,16 +282,20 @@
                 </a>
 
                 <button type="submit"
-                    wire:loading.attr="disabled"
-                    class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 rounded-xl text-sm font-bold text-slate-900 bg-gradient-to-r from-vinix-aurum via-yellow-400 to-amber-500 hover:from-yellow-400 hover:to-amber-600 active:scale-95 shadow-lg shadow-amber-500/25 transition-all duration-200">
-                    <span wire:loading.remove>Kirim Lamaran ke HRD</span>
-                    <span wire:loading class="flex items-center">
-                        <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-slate-900" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Memproses Pengiriman...
-                    </span>
+                    :disabled="isSubmitting"
+                    class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 rounded-xl text-sm font-bold text-slate-900 bg-gradient-to-r from-vinix-aurum via-yellow-400 to-amber-500 hover:from-yellow-400 hover:to-amber-600 active:scale-95 shadow-lg shadow-amber-500/25 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed">
+                    <template x-if="!isSubmitting">
+                        <span>Kirim Lamaran ke HRD</span>
+                    </template>
+                    <template x-if="isSubmitting">
+                        <span class="flex items-center">
+                            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-slate-900" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Mengunggah & Mengirimkan Lamaran...
+                        </span>
+                    </template>
                 </button>
             </div>
         </form>
