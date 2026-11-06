@@ -97,18 +97,52 @@
         @endif
     </div>
 
-    <!-- Print Handler Script & Strict Print CSS -->
+    <!-- Print Handler Script & Dedicated Print Engine -->
     <script>
-        function triggerCvPrint() {
-            // Remove any card that hasn't successfully loaded so only real pages print
-            document.querySelectorAll('.cv-page-card:not(.cv-page-loaded)').forEach(function(card) {
-                card.remove();
+        function prepareCvPrintArea() {
+            let printArea = document.getElementById('cv-print-area');
+            if (!printArea) {
+                printArea = document.createElement('div');
+                printArea.id = 'cv-print-area';
+                document.body.appendChild(printArea);
+            }
+            printArea.innerHTML = '';
+
+            // Find all loaded page images
+            const loadedCards = document.querySelectorAll('.cv-page-card.cv-page-loaded');
+            const targetCards = loadedCards.length > 0 
+                ? loadedCards 
+                : document.querySelectorAll('.cv-page-card:not([style*="display: none"])');
+
+            targetCards.forEach(function(card) {
+                const img = card.querySelector('.cv-page-image');
+                if (img && img.src) {
+                    const sheet = document.createElement('div');
+                    sheet.className = 'print-cv-sheet';
+                    const printImg = document.createElement('img');
+                    printImg.src = img.src;
+                    sheet.appendChild(printImg);
+                    printArea.appendChild(sheet);
+                }
             });
-            window.print();
         }
+
+        function triggerCvPrint() {
+            prepareCvPrintArea();
+            setTimeout(function() {
+                window.print();
+            }, 50);
+        }
+
+        window.addEventListener('beforeprint', prepareCvPrintArea);
     </script>
 
     <style>
+        /* Hidden on screen */
+        #cv-print-area {
+            display: none;
+        }
+
         @media print {
             @page {
                 size: A4 portrait;
@@ -120,74 +154,58 @@
                 padding: 0 !important;
                 background: #ffffff !important;
                 width: 100% !important;
+                height: auto !important;
+                min-height: auto !important;
             }
 
-            header, nav, footer, button, a,
-            .cv-info-banner,
-            .cv-card-header {
+            /* Hide all regular web layout elements */
+            body > *:not(#cv-print-area) {
                 display: none !important;
             }
 
-            main, .max-w-4xl, .space-y-6 {
-                margin: 0 !important;
-                padding: 0 !important;
-                max-width: 100% !important;
+            /* Display strictly the isolated print container */
+            body > #cv-print-area {
+                display: block !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
                 width: 100% !important;
-                box-shadow: none !important;
-                border: none !important;
-                gap: 0 !important;
-            }
-
-            .cv-page-card:not(.cv-page-loaded) {
-                display: none !important;
-            }
-
-            .cv-page-card {
-                box-shadow: none !important;
-                border: none !important;
-                padding: 0 !important;
                 margin: 0 !important;
+                padding: 0 !important;
                 background: #ffffff !important;
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-                page-break-after: page !important;
-                break-after: page !important;
+            }
+
+            .print-cv-sheet {
                 width: 100vw !important;
                 height: 100vh !important;
+                max-height: 100vh !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-sizing: border-box !important;
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
+                page-break-after: always !important;
+                break-after: page !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
                 overflow: hidden !important;
+                background: #ffffff !important;
             }
 
-            .cv-page-card:last-child {
+            .print-cv-sheet:last-child {
                 page-break-after: auto !important;
                 break-after: auto !important;
             }
 
-            .cv-image-wrap {
-                margin: 0 !important;
-                padding: 0 !important;
-                background: transparent !important;
-                width: 100% !important;
-                height: 100% !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                border: none !important;
-            }
-
-            .cv-page-image {
-                max-width: 100vw !important;
-                max-height: 99.5vh !important;
+            .print-cv-sheet img {
+                max-width: 100% !important;
+                max-height: 100% !important;
                 width: auto !important;
                 height: auto !important;
                 object-fit: contain !important;
-                border: none !important;
-                box-shadow: none !important;
-                border-radius: 0 !important;
-                margin: auto !important;
                 display: block !important;
+                margin: auto !important;
             }
         }
     </style>
