@@ -157,4 +157,23 @@ class HrdController extends Controller
 
         return back()->with('success', 'Status keputusan lamaran berhasil diperbarui.');
     }
+
+    /**
+     * View applicant's CV in executive document viewer.
+     */
+    public function viewCv(User $applicant): View|RedirectResponse
+    {
+        abort_if(!$applicant->isApplicant(), 404);
+
+        $profile = $applicant->profile;
+        if (!$profile || !$profile->cv_path) {
+            return back()->with('error', 'Pelamar belum mengunggah dokumen CV.');
+        }
+
+        return view('dashboard.cv-viewer', [
+            'applicant' => $applicant,
+            'profile' => $profile,
+            'backUrl' => route('hrd.applicants.detail', $applicant->id),
+        ]);
+    }
 }

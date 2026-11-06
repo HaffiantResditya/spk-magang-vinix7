@@ -25,6 +25,7 @@ Route::middleware(['auth', 'role:applicant'])->prefix('applicant')->name('applic
     Route::get('/assessment', [ApplicantController::class, 'assessment'])->name('assessment');
     Route::get('/results', [ApplicantController::class, 'results'])->name('results');
     Route::post('/apply', [ApplicantController::class, 'submitApplication'])->name('apply');
+    Route::get('/cv', [ApplicantController::class, 'viewCv'])->name('cv');
 });
 
 // HRD Admin Routes
@@ -32,6 +33,7 @@ Route::middleware(['auth', 'role:hrd,superadmin'])->prefix('hrd')->name('hrd.')-
     Route::get('/dashboard', [HrdController::class, 'dashboard'])->name('dashboard');
     Route::get('/applicants', [HrdController::class, 'applicants'])->name('applicants');
     Route::get('/applicants/{applicant}', [HrdController::class, 'applicantDetail'])->name('applicants.detail');
+    Route::get('/applicants/{applicant}/cv', [HrdController::class, 'viewCv'])->name('applicants.cv');
     Route::put('/applications/{application}/status', [HrdController::class, 'updateStatus'])->name('applicants.updateStatus');
 });
 

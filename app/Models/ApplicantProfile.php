@@ -38,4 +38,48 @@ class ApplicantProfile extends Model
 
         return asset('storage/' . $this->cv_path);
     }
+
+    /**
+     * Get the accessible preview image URL (converts Cloudinary .pdf to .jpg to bypass ACL restriction).
+     */
+    public function getCvPreviewUrlAttribute(): ?string
+    {
+        if (empty($this->cv_path)) {
+            return null;
+        }
+
+        if (str_starts_with($this->cv_path, 'http://') || str_starts_with($this->cv_path, 'https://')) {
+            if (str_ends_with(strtolower($this->cv_path), '.pdf')) {
+                return substr($this->cv_path, 0, -4) . '.jpg';
+            }
+            return $this->cv_path;
+        }
+
+        return asset('storage/' . $this->cv_path);
+    }
+
+    /**
+     * Get page URLs for multi-page document preview (supports up to 5 pages from Cloudinary).
+     */
+    public function getCvPagesAttribute(): array
+    {
+        if (empty($this->cv_path)) {
+            return [];
+        }
+
+        if (str_starts_with($this->cv_path, 'http://') || str_starts_with($this->cv_path, 'https://')) {
+            if (str_contains($this->cv_path, 'res.cloudinary.com') && str_ends_with(strtolower($this->cv_path), '.pdf')) {
+                $pages = [];
+                for ($i = 1; $i <= 5; $i++) {
+                    $pageUrl = preg_replace('#/image/upload/(v\d+/)#', "/image/upload/pg_{$i}/$1", $this->cv_path);
+                    $pageUrl = preg_replace('#\.pdf$#i', '.jpg', $pageUrl);
+                    $pages[] = $pageUrl;
+                }
+                return $pages;
+            }
+            return [$this->cv_preview_url];
+        }
+
+        return [$this->cv_url];
+    }
 }

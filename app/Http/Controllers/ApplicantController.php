@@ -166,4 +166,24 @@ class ApplicantController extends Controller
         return redirect()->route('applicant.dashboard')
             ->with('success', 'Lamaran berhasil dikirimkan ke HRD PT Vinix Seven Aurum! Pantau status Anda di portal ini.');
     }
+
+    /**
+     * View applicant's own CV in executive document viewer.
+     */
+    public function viewCv(): View|RedirectResponse
+    {
+        $user = Auth::user();
+        $profile = $user->profile;
+
+        if (!$profile || !$profile->cv_path) {
+            return redirect()->route('applicant.dashboard')
+                ->with('error', 'Anda belum mengunggah berkas CV.');
+        }
+
+        return view('dashboard.cv-viewer', [
+            'applicant' => $user,
+            'profile' => $profile,
+            'backUrl' => route('applicant.dashboard'),
+        ]);
+    }
 }
