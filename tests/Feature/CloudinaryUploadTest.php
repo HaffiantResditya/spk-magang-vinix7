@@ -17,7 +17,7 @@ class CloudinaryUploadTest extends TestCase
         ]);
 
         $this->assertEquals(
-            'https://res.cloudinary.com/fwc9kf3e/image/upload/v1793011933/spk-magang-vinix7/cvs/cv_test.pdf',
+            'https://res.cloudinary.com/fwc9kf3e/image/upload/v1793011933/spk-magang-vinix7/cvs/cv_test.jpg',
             $profile->cv_url
         );
     }

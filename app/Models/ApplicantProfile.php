@@ -25,6 +25,8 @@ class ApplicantProfile extends Model
 
     /**
      * Get the accessible URL for the CV document (Cloudinary HTTPS or local storage).
+     * Cloudinary blocks direct public delivery of .pdf files on free accounts with 401 ACL failure,
+     * so Cloudinary PDF URLs are safely converted to high-resolution rendered .jpg format.
      */
     public function getCvUrlAttribute(): ?string
     {
@@ -33,6 +35,9 @@ class ApplicantProfile extends Model
         }
 
         if (str_starts_with($this->cv_path, 'http://') || str_starts_with($this->cv_path, 'https://')) {
+            if (str_contains($this->cv_path, 'res.cloudinary.com') && str_ends_with(strtolower($this->cv_path), '.pdf')) {
+                return substr($this->cv_path, 0, -4) . '.jpg';
+            }
             return $this->cv_path;
         }
 
