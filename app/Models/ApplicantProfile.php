@@ -24,6 +24,22 @@ class ApplicantProfile extends Model
     }
 
     /**
+     * Get the raw unmodified CV URL or path (e.g. original .pdf file).
+     */
+    public function getRawCvUrlAttribute(): ?string
+    {
+        if (empty($this->cv_path)) {
+            return null;
+        }
+
+        if (str_starts_with($this->cv_path, 'http://') || str_starts_with($this->cv_path, 'https://')) {
+            return $this->cv_path;
+        }
+
+        return asset('storage/' . $this->cv_path);
+    }
+
+    /**
      * Get the accessible URL for the CV document (Cloudinary HTTPS or local storage).
      * Cloudinary blocks direct public delivery of .pdf files on free accounts with 401 ACL failure,
      * so Cloudinary PDF URLs are safely converted to high-resolution rendered .jpg format.
