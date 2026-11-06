@@ -55,6 +55,8 @@ class CloudinaryService
             'folder'        => $this->folder,
             'public_id'     => $publicId,
             'resource_type' => 'auto',
+            'type'          => 'upload',
+            'access_mode'   => 'public',
             'overwrite'     => true,
             'tags'          => ['spk-magang-vinix7', 'applicant-cv'],
         ]);
