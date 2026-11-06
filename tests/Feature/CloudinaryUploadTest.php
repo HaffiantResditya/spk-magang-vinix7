@@ -39,4 +39,14 @@ class CloudinaryUploadTest extends TestCase
         $service = app(CloudinaryService::class);
         $this->assertInstanceOf(CloudinaryService::class, $service);
     }
+
+    public function test_cloudinary_service_generates_signed_pdf_url(): void
+    {
+        $service = app(CloudinaryService::class);
+        $url = $service->getSignedPdfUrl('https://res.cloudinary.com/fwc9kf3e/image/upload/v1793011933/spk-magang-vinix7/cvs/cv_test.pdf', false);
+
+        $this->assertStringContainsString('spk-magang-vinix7%2Fcvs%2Fcv_test', $url);
+        $this->assertStringContainsString('signature=', $url);
+        $this->assertStringContainsString('format=pdf', $url);
+    }
 }

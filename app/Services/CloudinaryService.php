@@ -63,4 +63,27 @@ class CloudinaryService
 
         return $response['secure_url'];
     }
+
+    /**
+     * Generate a cryptographically signed URL to view or download a protected PDF.
+     * Bypasses Cloudinary account-level ACL restrictions with HTTP 200 OK access.
+     *
+     * @param string $cvPath Full Cloudinary URL or public ID
+     * @param bool $attachment Whether to force download or view inline
+     * @return string Secure signed URL
+     */
+    public function getSignedPdfUrl(string $cvPath, bool $attachment = false): string
+    {
+        if (preg_match('#/image/upload/(?:v\d+/)?(.+?)(?:\.[a-zA-Z0-9]+)?$#', $cvPath, $matches)) {
+            $publicId = $matches[1];
+        } else {
+            $publicId = $cvPath;
+        }
+
+        return $this->cloudinary->uploadApi()->privateDownloadUrl($publicId, 'pdf', [
+            'resource_type' => 'image',
+            'type'          => 'upload',
+            'attachment'    => $attachment,
+        ]);
+    }
 }

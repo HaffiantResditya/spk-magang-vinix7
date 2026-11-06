@@ -173,7 +173,28 @@ class HrdController extends Controller
         return view('dashboard.cv-viewer', [
             'applicant' => $applicant,
             'profile' => $profile,
+            'downloadUrl' => route('hrd.applicants.cv.download', $applicant->id),
             'backUrl' => route('hrd.applicants.detail', $applicant->id),
         ]);
+    }
+
+    /**
+     * Download or view applicant's original CV PDF using cryptographically signed access.
+     */
+    public function downloadCv(User $applicant, \App\Services\CloudinaryService $cloudinary): RedirectResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
+    {
+        abort_if(!$applicant->isApplicant(), 404);
+
+        $profile = $applicant->profile;
+        if (!$profile || !$profile->cv_path) {
+            abort(404, 'Pelamar belum mengunggah berkas CV.');
+        }
+
+        if (str_contains($profile->cv_path, 'res.cloudinary.com')) {
+            $url = $cloudinary->getSignedPdfUrl($profile->cv_path, false);
+            return redirect()->away($url);
+        }
+
+        return response()->file(storage_path('app/public/' . $profile->cv_path));
     }
 }

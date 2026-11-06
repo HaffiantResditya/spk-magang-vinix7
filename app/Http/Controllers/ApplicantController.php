@@ -183,7 +183,29 @@ class ApplicantController extends Controller
         return view('dashboard.cv-viewer', [
             'applicant' => $user,
             'profile' => $profile,
+            'downloadUrl' => route('applicant.cv.download'),
             'backUrl' => route('applicant.dashboard'),
         ]);
+    }
+
+    /**
+     * Download or view original CV PDF using cryptographically signed access.
+     */
+    public function downloadCv(CloudinaryService $cloudinary): RedirectResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
+    {
+        $user = Auth::user();
+        $profile = $user->profile;
+
+        if (!$profile || !$profile->cv_path) {
+            return redirect()->route('applicant.dashboard')
+                ->with('error', 'Anda belum mengunggah berkas CV.');
+        }
+
+        if (str_contains($profile->cv_path, 'res.cloudinary.com')) {
+            $url = $cloudinary->getSignedPdfUrl($profile->cv_path, false);
+            return redirect()->away($url);
+        }
+
+        return response()->file(storage_path('app/public/' . $profile->cv_path));
     }
 }
